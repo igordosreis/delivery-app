@@ -5,7 +5,7 @@
   "author": "Igor dos Reis",
   "main": "index.js",
   "scripts": {
-    "setup": "npm run setup:local && cd .. && docker compose up --build -d",
+    "setup": "npm run setup:local && docker compose up --build -d",
     "setup:local": "npm install && cd frontend && npm install && cd .. && cd backend && npm install",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install"
