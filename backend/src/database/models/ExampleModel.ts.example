@@ -1,0 +1,31 @@
+import { Model } from 'sequelize';
+import db from '.';
+// import OtherModel from './OtherModel';
+
+class Example extends Model {
+  // declare <field>: <type>;
+}
+
+Example.init({
+  // ... Fields
+}, {
+  // ... Other configs
+  underscored: true,
+  sequelize: db,
+  // modelName: 'example',
+  timestamps: false,
+});
+
+/**
+  * Workaround to apply associations in typescript:
+  * Associations 1:N devem ficar em uma das instâncias de modelo
+  * Associations 1:N must be declared in one of the model instances
+  * */
+
+// OtherModel.belongsTo(Example, { foreignKey: 'fieldA', as: 'foreignFieldA' });
+// OtherModel.belongsTo(Example, { foreignKey: 'fieldB', as: 'foreignFieldB' });
+
+// Example.hasMany(OtherModel, { foreignKey: 'fieldC', as: 'foreignFieldC' });
+// Example.hasMany(OtherModel, { foreignKey: 'fieldD', as: 'foreignFieldD' });
+
+export default Example;

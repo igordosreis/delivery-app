@@ -1,0 +1,30 @@
+{
+  "name": "boilerplate-fullstack",
+  "version": "1.0.0",
+  "description": "Boilerplate for fullstack projects.",
+  "author": "Igor dos Reis",
+  "main": "index.js",
+  "scripts": {
+    "setup": "npm run setup:local && cd .. && docker compose up --build -d",
+    "setup:local": "npm install && cd frontend && npm install && cd .. && cd backend && npm install",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igordosreis/boilerplate-fullstack.git"
+  },
+  "bugs": {
+    "url": "https://github.com/igordosreis/boilerplate-fullstack/issues"
+  },
+  "homepage": "https://github.com/igordosreis/boilerplate-fullstack#readme",
+  "volta": {
+    "node": "16.15.1",
+    "npm": "8.11.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "17.6.7",
+    "@commitlint/config-angular": "17.6.7",
+    "husky": "8.0.3"
+  }
+}

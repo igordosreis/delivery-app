@@ -1,0 +1,43 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend boilerplate",
+  "author": "Igor dos Reis",
+  "main": "./src/api/server.js",
+  "scripts": {
+    "dev": "tsnd --respawn src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check-types": "tsc --noEmit --skipLibCheck"
+  },
+  "dependencies": {
+    "cors": "2.8.5",
+    "dotenv": "16.0.0",
+    "express": "4.17.3",
+    "express-async-errors": "3.1.1",
+    "joi": "17.9.2",
+    "sequelize": "6.11.0"
+  },
+  "devDependencies": {
+    "@types/cors": "2.8.13",
+    "@types/express": "4.17.17",
+    "@types/mocha": "10.0.1",
+    "@types/node": "20.4.6",
+    "@types/sequelize": "4.28.14",
+    "@typescript-eslint/eslint-plugin": "5.3.1",
+    "@typescript-eslint/parser": "5.3.1",
+    "eslint": "7.32.0",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-airbnb-typescript": "15.0.0",
+    "eslint-plugin-import": "2.25.3",
+    "eslint-plugin-mocha": "10.1.0",
+    "eslint-plugin-sonarjs": "0.10.0",
+    "lint-staged": "13.2.3",
+    "mysql2": "2.3.0",
+    "sequelize-cli": "6.2.0",
+    "ts-node-dev": "1.1.8",
+    "typescript": "5.1.6"
+  },
+  "volta": {
+    "extends": "../package.json"
+  }
+}
