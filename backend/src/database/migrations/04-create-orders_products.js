@@ -2,14 +2,14 @@
 /* eslint-disable max-lines-per-function */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('sales_products', {
-      sale_id: {
+    await queryInterface.createTable('orders_products', {
+      order_id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         unique: false,
         allowNull: false,
         references: {
-          model: 'sales',
+          model: 'orders',
           key: 'id',
         },
         onUpdate: 'CASCADE',
@@ -38,6 +38,6 @@ module.exports = {
   },
 
   down: async (queryInterface, _Sequelize) => {
-    await queryInterface.dropTable('sales_products');
+    await queryInterface.dropTable('orders_products');
   },
 };
