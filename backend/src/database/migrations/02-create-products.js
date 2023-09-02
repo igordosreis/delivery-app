@@ -28,6 +28,7 @@ module.exports = {
       stock: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        defaultValue: 0,
       },
     }, {
       underscored: true,
