@@ -1,7 +1,7 @@
 import { DataTypes, Model } from 'sequelize';
 import db from '.';
 
-class Product extends Model {
+class ProductModel extends Model {
   declare id: number;
   declare productName: string;
   declare urlImage: string;
@@ -9,7 +9,7 @@ class Product extends Model {
   declare stock: number;
 }
 
-Product.init(
+ProductModel.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -42,4 +42,4 @@ Product.init(
   },
 );
 
-export default Product;
+export default ProductModel;

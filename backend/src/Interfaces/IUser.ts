@@ -1,9 +1,11 @@
-interface IUser {
-  id: number;
-  userName: string;
-  role: string;
+export interface IUserLogin {
   email: string;
   password: string;
 }
 
-export default IUser;
+export interface IUser extends IUserLogin {
+  id: number;
+  userName: string;
+  role: string;
+  token?: string;
+}
