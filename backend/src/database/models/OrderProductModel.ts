@@ -3,13 +3,13 @@ import db from '.';
 import OrderModel from './OrderModel';
 import ProductModel from './ProductModel';
 
-class OrderProduct extends Model {
+class OrderProductModel extends Model {
   declare orderId: number;
   declare productId: number;
   declare quantity: number;
 }
 
-OrderProduct.init(
+OrderProductModel.init(
   {
     orderId: {
       type: DataTypes.INTEGER,
@@ -41,10 +41,13 @@ OrderProduct.init(
   },
 );
 
-OrderProduct.belongsTo(OrderModel, { foreignKey: 'orderId', as: 'order' });
+OrderProductModel.belongsTo(OrderModel, { foreignKey: 'orderId', as: 'order' });
 OrderModel.hasMany(OrderModel, { foreignKey: 'orderId', as: 'order' });
 
-OrderProduct.belongsTo(ProductModel, { foreignKey: 'productId', as: 'product' });
-ProductModel.hasMany(OrderProduct, { foreignKey: 'productId', as: 'product' });
+OrderProductModel.belongsTo(ProductModel, {
+  foreignKey: 'productId',
+  as: 'product',
+});
+ProductModel.hasMany(OrderProductModel, { foreignKey: 'productId', as: 'product' });
 
-export default OrderProduct;
+export default OrderProductModel;

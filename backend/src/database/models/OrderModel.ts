@@ -2,7 +2,7 @@ import { DataTypes, Model } from 'sequelize';
 import db from '.';
 import UserModel from './UserModel';
 
-class Order extends Model {
+class OrderModel extends Model {
   declare id: number;
   declare userId: string;
   declare sellerId: string;
@@ -13,7 +13,7 @@ class Order extends Model {
   declare orderDate: Date;
 }
 
-Order.init(
+OrderModel.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -71,10 +71,10 @@ Order.init(
   },
 );
 
-Order.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
-UserModel.hasMany(Order, { foreignKey: 'userId', as: 'user' });
+OrderModel.belongsTo(UserModel, { foreignKey: 'userId', as: 'user' });
+UserModel.hasMany(OrderModel, { foreignKey: 'userId', as: 'user' });
 
-Order.belongsTo(UserModel, { foreignKey: 'sellerId', as: 'seller' });
-UserModel.hasMany(Order, { foreignKey: 'sellerId', as: 'seller' });
+OrderModel.belongsTo(UserModel, { foreignKey: 'sellerId', as: 'seller' });
+UserModel.hasMany(OrderModel, { foreignKey: 'sellerId', as: 'seller' });
 
-export default Order;
+export default OrderModel;
