@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 import HttpException from './httpException.util';
 import { IUser } from '../Interfaces/IUser';
 
-const jwtSecret = (process.env.JWT_SECRET as string) || 'jwtsecret';
+const jwtSecret = (process.env.JWT_SECRET as string) ?? 'jwtsecret';
 
 const createToken = ({ id, userName, email, role }: Partial<IUser>): string => {
   const token = jwt.sign({ id, userName, email, role }, jwtSecret, {
