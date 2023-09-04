@@ -4,13 +4,6 @@ import cors from 'cors';
 import router from './routes';
 import httpErrorMiddleware from './middlewares/httpError.middleware';
 
-// const app = express();
-// app.use('/images', express.static(`${__dirname}/images`));
-// app.use(cors());
-// app.use(express.json());
-
-// export default app;
-
 class App {
   public app: express.Express;
 
