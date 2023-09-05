@@ -1,8 +1,8 @@
 import { Md5 } from 'ts-md5';
 import { IUserLogged, IUserNew } from '../Interfaces/IUser';
 import UserModel from '../database/models/UserModel';
-import HttpException from '../utils/httpException.util';
 import { createToken } from '../utils/jwt.util';
+import validateRegisterEmail from './validations/register.validation';
 
 export default class RegisterService {
   public static async registerNewUser({
@@ -13,17 +13,14 @@ export default class RegisterService {
     const [user, created] = await UserModel.findOrCreate({
       where: { email },
       defaults: { userName, password: Md5.hashStr(password) },
-      raw: true,
     });
-
-    const isEmailAlreadyRegistered = !created;
-    if (isEmailAlreadyRegistered) {
-      throw new HttpException(409, 'Email already in use');
-    }
-
+    validateRegisterEmail(created);
     const token = createToken(user);
-    const { password: removedPassword, ...userWithoutPassword } = user;
 
-    return { ...userWithoutPassword, token };
+    // Typescript can find the dataValues property
+    // const { password: removedPassword, ...userWithoutPassword } = user.dataValues;
+    const { id, role, userName: newUserName, email: newEmail } = user;
+
+    return { id, role, userName: newUserName, email: newEmail, token };
   }
 }
