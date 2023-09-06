@@ -4,7 +4,10 @@ import { createToken } from '../utils/jwt.util';
 import validateLogin from './validations/login.validation';
 
 export default class LoginService {
-  public static async login({ email, password }: IUserLogin): Promise<IUserLogged> {
+  public static async loginUser({
+    email,
+    password,
+  }: IUserLogin): Promise<IUserLogged> {
     const userFetchResult: IUserDb | null = await UserModel.findOne({
       where: { email },
       raw: true,

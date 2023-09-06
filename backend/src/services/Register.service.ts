@@ -17,7 +17,7 @@ export default class RegisterService {
     validateRegisterEmail(created);
     const token = createToken(user);
 
-    // Typescript can find the dataValues property
+    // Typescript can't find the dataValues property
     // const { password: removedPassword, ...userWithoutPassword } = user.dataValues;
     const { id, role, userName: newUserName, email: newEmail } = user;
 
