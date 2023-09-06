@@ -3,6 +3,8 @@ import { CustomerController } from '../controllers';
 
 const customerRouter = Router();
 
-customerRouter.post('/', CustomerController.getAllProducts);
+customerRouter.get('/products', CustomerController.getAllProducts);
+
+customerRouter.get('/seller', CustomerController.getAllSellers);
 
 export default customerRouter;
