@@ -1,4 +1,4 @@
-interface IProduct {
+interface IOrder {
   id: number;
   userId: number;
   sellerId: number;
@@ -9,4 +9,4 @@ interface IProduct {
   orderDate: Date;
 }
 
-export default IProduct;
+export default IOrder;
