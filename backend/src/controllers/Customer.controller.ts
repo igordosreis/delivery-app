@@ -7,4 +7,10 @@ export default class CustomerController {
 
     res.status(200).json(allProducts);
   }
+
+  public static async getAllSellers(_req: Request, res: Response): Promise<void> {
+    const allSellers = await CustomerService.getAllSellers();
+
+    res.status(200).json(allSellers);
+  }
 }
