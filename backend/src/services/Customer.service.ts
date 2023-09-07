@@ -1,7 +1,8 @@
-import IProduct from '../Interfaces/IProduct';
+import { IProduct, IProductInOrder } from '../Interfaces/IProduct';
 import { IUserDb } from '../Interfaces/IUser';
 import ProductModel from '../database/models/ProductModel';
 import UserModel from '../database/models/UserModel';
+import validateProductsList from './validations/customer.validation';
 
 export default class CustomerService {
   public static async getAllProducts(): Promise<IProduct[]> {
@@ -17,5 +18,10 @@ export default class CustomerService {
     });
 
     return allSellers;
+  }
+
+  public static async checkoutUserOder(productsList: IProductInOrder[]) {
+    validateProductsList(productsList);
+    return '';
   }
 }

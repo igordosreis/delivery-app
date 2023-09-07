@@ -1,4 +1,4 @@
-interface IProduct {
+export interface IProduct {
   id: number;
   productName: string;
   urlImage: string;
@@ -6,4 +6,11 @@ interface IProduct {
   stock: number;
 }
 
-export default IProduct;
+export interface IProductInOrder {
+  id: number;
+  quantity: number;
+}
+
+export interface IProductValidated extends IProductInOrder {
+  price: number;
+}
