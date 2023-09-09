@@ -10,9 +10,9 @@ const checkRepeatedIds = (productsList: IProductInOrder[]): void => {
   }
 };
 
-const checkIfProductsExist = async (
+const checkIfProductsExist = (
   productsList: IProductInOrder[],
-): Promise<IProductValidated[]> => {
+): IProductValidated[] => {
   const productsListPromise = productsList.map(async ({ id, quantity }) => {
     const product = await ProductModel.findOne({
       where: { id },
@@ -25,15 +25,31 @@ const checkIfProductsExist = async (
 
     return { ...product, quantity };
   });
-  const validatedProductsList = await Promise.all(productsListPromise);
-  return validatedProductsList;
+  const validatedProductsList = Promise.all(productsListPromise);
+
+  return validatedProductsList as unknown as IProductValidated[];
 };
 
-const validateProductsList = (productsList: IProductInOrder[]) => {
-  checkRepeatedIds(productsList);
-  const products = checkIfProductsExist(productsList);
+const checkTotalPrice = (productsList: IProductValidated[], totalPrice: number) => {
+  const validatedPrice = productsList.reduce((accPrice, currProduct) => {
+    const productTotal = currProduct.quantity * Number(currProduct.price);
+    return accPrice + productTotal;
+  }, 0);
 
-  return products;
+  const isPriceNotEqual = Math.abs(+validatedPrice - +totalPrice) >= 0.01;
+  if (isPriceNotEqual) throw new HttpException(400, 'Invalid total price');
+};
+
+const validateProductsList = (
+  productsList: IProductInOrder[],
+  totalPrice: number,
+  _sellerId: number,
+) => {
+  checkRepeatedIds(productsList);
+  const validatedProducts = checkIfProductsExist(productsList);
+  checkTotalPrice(validatedProducts, totalPrice);
+
+  return validatedProducts;
 };
 
 export default validateProductsList;
