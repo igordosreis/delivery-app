@@ -1,12 +1,16 @@
-interface IOrder {
-  id: number;
-  userId: number;
+import { IProductInOrder } from './IProduct';
+
+export interface IOrder {
   sellerId: number;
   totalPrice: number;
-  status: string;
   deliveryAddress: string;
   deliveryNumber: number;
-  orderDate: Date;
+  products: IProductInOrder[];
 }
 
-export default IOrder;
+export interface IOrderDb extends IOrder {
+  id: number;
+  userId: number;
+  status: string;
+  orderDate: Date;
+}

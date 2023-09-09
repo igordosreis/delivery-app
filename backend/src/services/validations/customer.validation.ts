@@ -1,5 +1,6 @@
 import { IProductInOrder, IProductValidated } from '../../Interfaces/IProduct';
 import ProductModel from '../../database/models/ProductModel';
+import UserModel from '../../database/models/UserModel';
 import HttpException from '../../utils/httpException.util';
 
 const checkRepeatedIds = (productsList: IProductInOrder[]): void => {
@@ -30,7 +31,10 @@ const checkIfProductsExist = (
   return validatedProductsList as unknown as IProductValidated[];
 };
 
-const checkTotalPrice = (productsList: IProductValidated[], totalPrice: number) => {
+const checkTotalPrice = (
+  productsList: IProductValidated[],
+  totalPrice: number,
+): void => {
   const validatedPrice = productsList.reduce((accPrice, currProduct) => {
     const productTotal = currProduct.quantity * Number(currProduct.price);
     return accPrice + productTotal;
@@ -40,16 +44,25 @@ const checkTotalPrice = (productsList: IProductValidated[], totalPrice: number) 
   if (isPriceNotEqual) throw new HttpException(400, 'Invalid total price');
 };
 
-const validateProductsList = (
+const checkSeller = async (sellerId: number): Promise<void> => {
+  const seller = await UserModel.findOne({ where: { id: sellerId }, raw: true });
+
+  const isSellerNotFound = !seller;
+  if (isSellerNotFound) throw new HttpException(404, 'Seller not found');
+
+  const isUserFoundNotSeller = seller.role !== 'seller';
+  if (isUserFoundNotSeller) throw new HttpException(401, 'User is not a seller');
+};
+
+const validateProductsList = async (
   productsList: IProductInOrder[],
   totalPrice: number,
-  _sellerId: number,
-) => {
+  sellerId: number,
+): Promise<void> => {
   checkRepeatedIds(productsList);
   const validatedProducts = checkIfProductsExist(productsList);
   checkTotalPrice(validatedProducts, totalPrice);
-
-  return validatedProducts;
+  await checkSeller(sellerId);
 };
 
 export default validateProductsList;
