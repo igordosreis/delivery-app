@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import sequelize from '../database/models';
 import { IOrder } from '../Interfaces/IOrder';
 import { IProduct } from '../Interfaces/IProduct';
@@ -49,7 +48,10 @@ export default class CustomerService {
     }
   }
 
-  public static async checkoutUserOder(orderInfo: IOrder, userInfo: IUserLogged): Promise<number> {
+  public static async checkoutCustomerOder(
+    orderInfo: IOrder,
+    userInfo: IUserLogged,
+  ): Promise<number> {
     const { products, totalPrice, sellerId } = orderInfo;
     validateProductsList(products, totalPrice, sellerId);
 
