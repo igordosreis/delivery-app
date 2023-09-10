@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-// import sequelize, { Transaction } from 'sequelize';
+import sequelize from '../database/models';
 import { IOrder } from '../Interfaces/IOrder';
 import { IProduct } from '../Interfaces/IProduct';
 import { IUserDb, IUserLogged } from '../Interfaces/IUser';
@@ -28,39 +28,25 @@ export default class CustomerService {
 
   public static async createOrder(orderInfo: IOrder, userId: number): Promise<number> {
     const { sellerId, totalPrice, deliveryAddress, deliveryNumber, products } = orderInfo;
-    const t = await OrderModel.sequelize?.transaction();
+    const t = await sequelize.transaction();
+
     try {
-      const { id: orderId } = await OrderModel.create({
-        userId,
-        sellerId,
-        totalPrice,
-        deliveryAddress,
-        deliveryNumber,
-        raw: true,
-      });
-      // const { id: orderId } = await OrderModel.create({ userId, sellerId, totalPrice, deliveryAddress, deliveryNumber, raw: true},
-      //   {transaction: t});
+      const { id: orderId } = await OrderModel.create(
+        { userId, sellerId, totalPrice, deliveryAddress, deliveryNumber, raw: true },
+        { transaction: t },
+      );
       const orderProductPromise = products.map(async ({ id, quantity }) => {
-        await OrderProductModel.create({ orderId, productId: id, quantity });
+        await OrderProductModel.create({ orderId, productId: id, quantity }, { transaction: t });
       });
       await Promise.all(orderProductPromise);
-      await t?.commit();
+      await t.commit();
 
       return orderId;
-    } catch (err) {
-      await t?.rollback();
+    } catch (error) {
+      await t.rollback();
 
       throw new HttpException(500, 'Internal error');
     }
-    // await OrderModel.sequelize?.transaction(async (transaction) => {
-    //   await OrderModel.
-    // });
-    // const t = new sequelize.Transaction(async (t) => {}, { transaction: t });
-    // const orderId = new Promise((resolve: Function, reject: Function) => {
-    //   sequelize.Transaction((t: Transaction) => {
-    //     // a
-    //   });
-    // });
   }
 
   public static async checkoutUserOder(orderInfo: IOrder, userInfo: IUserLogged): Promise<number> {
