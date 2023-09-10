@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import RegisterService from '../services/Register.service';
+import { RegisterService } from '../services';
 
 export default class RegisterController {
   public static async registerNewUser(req: Request, res: Response): Promise<void> {
