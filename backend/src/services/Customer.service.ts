@@ -1,5 +1,5 @@
 import sequelize from '../database/models';
-import { IOrder } from '../Interfaces/IOrder';
+import { IOrderCheckout } from '../Interfaces/IOrder';
 import { IProduct } from '../Interfaces/IProduct';
 import { IUserDb, IUserLogged } from '../Interfaces/IUser';
 import ProductModel from '../database/models/ProductModel';
@@ -25,7 +25,7 @@ export default class CustomerService {
     return allSellers;
   }
 
-  public static async createOrder(orderInfo: IOrder, userId: number): Promise<number> {
+  public static async createOrder(orderInfo: IOrderCheckout, userId: number): Promise<number> {
     const { sellerId, totalPrice, deliveryAddress, deliveryNumber, products } = orderInfo;
     const t = await sequelize.transaction();
 
@@ -49,7 +49,7 @@ export default class CustomerService {
   }
 
   public static async checkoutCustomerOder(
-    orderInfo: IOrder,
+    orderInfo: IOrderCheckout,
     userInfo: IUserLogged,
   ): Promise<number> {
     const { products, totalPrice, sellerId } = orderInfo;

@@ -1,16 +1,19 @@
 import { IProductInOrder } from './IProduct';
 
 export interface IOrder {
-  sellerId: number;
+  sellerId: string;
   totalPrice: number;
   deliveryAddress: string;
-  deliveryNumber: number;
+  deliveryNumber: string;
+}
+
+export interface IOrderCheckout extends IOrder {
   products: IProductInOrder[];
 }
 
 export interface IOrderDb extends IOrder {
   id: number;
-  userId: number;
+  userId: string;
   status: string;
   orderDate: Date;
 }

@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { IOrder } from '../../Interfaces/IOrder';
+import { IOrderCheckout } from '../../Interfaces/IOrder';
 import { IProductInOrder } from '../../Interfaces/IProduct';
 
 const productsSchema = Joi.object<IProductInOrder>({
@@ -7,7 +7,7 @@ const productsSchema = Joi.object<IProductInOrder>({
   quantity: Joi.number().required(),
 });
 
-const checkoutSchema = Joi.object<IOrder>({
+const checkoutSchema = Joi.object<IOrderCheckout>({
   sellerId: Joi.number().required(),
   totalPrice: Joi.number().required(),
   deliveryAddress: Joi.string().required(),
