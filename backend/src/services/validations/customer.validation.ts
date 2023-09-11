@@ -5,10 +5,9 @@ import HttpException from '../../utils/httpException.util';
 
 const checkRepeatedIds = (productsList: IProductInOrder[]): void => {
   const idsList = productsList.map(({ id }) => id);
+
   const isIdRepeated = idsList.some((id, index) => idsList.indexOf(id) !== index);
-  if (isIdRepeated) {
-    throw new HttpException(400, 'There are duplicated products in the order');
-  }
+  if (isIdRepeated) throw new HttpException(400, 'There are duplicated products in the order');
 };
 
 const checkIfProductsExist = async (
@@ -34,6 +33,7 @@ const checkIfProductsExist = async (
 const checkTotalPrice = (productsList: IProductValidated[], totalPrice: number): void => {
   const validatedPrice = productsList.reduce((accPrice, currProduct) => {
     const productTotal = currProduct.quantity * Number(currProduct.price);
+
     return accPrice + productTotal;
   }, 0);
 
@@ -51,15 +51,15 @@ const checkSeller = async (sellerId: number): Promise<void> => {
   if (isUserFoundNotSeller) throw new HttpException(401, 'User is not a seller');
 };
 
-const validateProductsList = async (
+const validateOrderInfo = async (
   productsList: IProductInOrder[],
   totalPrice: number,
   sellerId: number,
 ): Promise<void> => {
+  await checkSeller(sellerId);
   checkRepeatedIds(productsList);
   const validatedProducts = await checkIfProductsExist(productsList);
   checkTotalPrice(validatedProducts, totalPrice);
-  await checkSeller(sellerId);
 };
 
-export default validateProductsList;
+export default validateOrderInfo;
