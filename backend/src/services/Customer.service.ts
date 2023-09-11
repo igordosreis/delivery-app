@@ -44,7 +44,7 @@ export default class CustomerService {
     } catch (error) {
       await t.rollback();
 
-      throw new HttpException(500, 'Internal error');
+      throw new HttpException(500, 'Internal server error');
     }
   }
 
