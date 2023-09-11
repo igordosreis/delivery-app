@@ -19,7 +19,7 @@ export default class CustomerService {
   public static async getAllSellers(): Promise<IUserDb[]> {
     const allSellers = UserModel.findAll({
       where: { role: 'seller' },
-      attributes: ['id', 'name'],
+      attributes: ['id', 'userName'],
     });
 
     return allSellers;
