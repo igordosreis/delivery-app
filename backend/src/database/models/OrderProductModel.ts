@@ -36,7 +36,7 @@ OrderProductModel.init(
   {
     underscored: true,
     sequelize: db,
-    modelName: 'products',
+    modelName: 'orders_products',
     timestamps: false,
   },
 );

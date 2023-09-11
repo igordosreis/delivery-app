@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import sequelize from '../database/models';
 import { IOrder } from '../Interfaces/IOrder';
 import { IProduct } from '../Interfaces/IProduct';
@@ -34,6 +35,7 @@ export default class CustomerService {
         { userId, sellerId, totalPrice, deliveryAddress, deliveryNumber, raw: true },
         { transaction: t },
       );
+      console.log('orderId: ', orderId);
       const orderProductPromise = products.map(async ({ id, quantity }) => {
         await OrderProductModel.create({ orderId, productId: id, quantity }, { transaction: t });
       });
@@ -44,6 +46,7 @@ export default class CustomerService {
     } catch (error) {
       await t.rollback();
 
+      console.log('error: ', error);
       throw new HttpException(500, 'Internal error');
     }
   }

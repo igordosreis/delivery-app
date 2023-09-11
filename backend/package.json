@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "tsnd --respawn src/server.ts",
     "check-types": "tsc --noEmit --skipLibCheck",
-    "db:reset": "npx -y tsc && sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate"
+    "db:reset": "npx -y tsc && sequelize-cli db:drop && npx sequelize-cli db:create && npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all"
   },
   "dependencies": {
     "cors": "2.8.5",

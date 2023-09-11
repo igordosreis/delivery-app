@@ -61,6 +61,7 @@ OrderModel.init(
     orderDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
   },
   {

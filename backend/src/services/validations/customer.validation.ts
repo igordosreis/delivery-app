@@ -11,9 +11,9 @@ const checkRepeatedIds = (productsList: IProductInOrder[]): void => {
   }
 };
 
-const checkIfProductsExist = (
+const checkIfProductsExist = async (
   productsList: IProductInOrder[],
-): IProductValidated[] => {
+): Promise<IProductValidated[]> => {
   const productsListPromise = productsList.map(async ({ id, quantity }) => {
     const product = await ProductModel.findOne({
       where: { id },
@@ -26,15 +26,12 @@ const checkIfProductsExist = (
 
     return { ...product, quantity };
   });
-  const validatedProductsList = Promise.all(productsListPromise);
+  const validatedProductsList = await Promise.all(productsListPromise);
 
   return validatedProductsList as unknown as IProductValidated[];
 };
 
-const checkTotalPrice = (
-  productsList: IProductValidated[],
-  totalPrice: number,
-): void => {
+const checkTotalPrice = (productsList: IProductValidated[], totalPrice: number): void => {
   const validatedPrice = productsList.reduce((accPrice, currProduct) => {
     const productTotal = currProduct.quantity * Number(currProduct.price);
     return accPrice + productTotal;
@@ -60,7 +57,7 @@ const validateProductsList = async (
   sellerId: number,
 ): Promise<void> => {
   checkRepeatedIds(productsList);
-  const validatedProducts = checkIfProductsExist(productsList);
+  const validatedProducts = await checkIfProductsExist(productsList);
   checkTotalPrice(validatedProducts, totalPrice);
   await checkSeller(sellerId);
 };
