@@ -35,7 +35,7 @@ export default class OrderService {
       include: {
         model: ProductModel,
         as: 'product',
-        attributes: ['id', 'userName', 'price', 'urlImage'],
+        attributes: ['id', 'productName', 'price', 'urlImage'],
       },
     });
 
