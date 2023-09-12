@@ -4,7 +4,7 @@ import { IUserLogged } from '../Interfaces/IUser';
 import OrderModel from '../database/models/OrderModel';
 import OrderProductModel from '../database/models/OrderProductModel';
 import ProductModel from '../database/models/ProductModel';
-import { validateOrderId } from './validations/order.validations';
+import { validateOrderId, validateStatus } from './validations/order.validations';
 
 export default class OrderService {
   public static async getAllOrders({ id, role }: IUserLogged): Promise<IOrderDb[]> {
@@ -37,5 +37,11 @@ export default class OrderService {
     const userName = validatedOrder?.seller?.userName;
 
     return { orderId, totalPrice, orderDate, status, userName, products };
+  }
+
+  public static async updateStatus(orderId: number, status: string, { role }: IUserLogged) {
+    const isUserCustomer = role === 'customer';
+    if (isUserCustomer) await validateStatus(orderId, status);
+    await OrderModel.update({ status }, { where: { id: orderId } });
   }
 }
