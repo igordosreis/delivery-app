@@ -4,7 +4,7 @@ import mapError from '../utils/mapError.util';
 import loginSchema from './schemas/login.schema';
 import { IUserLogin } from '../Interfaces/IUser';
 
-const verifyLoginData = (req: Request, _res: Response, next: NextFunction) => {
+const validateLoginMiddleware = (req: Request, _res: Response, next: NextFunction) => {
   const { email, password }: IUserLogin = req.body;
   const { error } = loginSchema.validate({ email, password });
 
@@ -19,4 +19,4 @@ const verifyLoginData = (req: Request, _res: Response, next: NextFunction) => {
   next();
 };
 
-export default verifyLoginData;
+export default validateLoginMiddleware;
