@@ -41,7 +41,7 @@ const checkTotalPrice = (productsList: IProductValidated[], totalPrice: number):
   if (isPriceNotEqual) throw new HttpException(400, 'Invalid total price');
 };
 
-const checkSeller = async (sellerId: number): Promise<void> => {
+const checkSeller = async (sellerId: string | number): Promise<void> => {
   const seller = await UserModel.findOne({ where: { id: sellerId }, raw: true });
 
   const isSellerNotFound = !seller;
@@ -54,7 +54,7 @@ const checkSeller = async (sellerId: number): Promise<void> => {
 const validateOrderInfo = async (
   productsList: IProductInOrder[],
   totalPrice: number,
-  sellerId: number,
+  sellerId: string | number,
 ): Promise<void> => {
   await checkSeller(sellerId);
   checkRepeatedIds(productsList);

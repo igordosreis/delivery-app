@@ -1,11 +1,15 @@
+/* eslint-disable max-lines-per-function */
 import { NextFunction, Request, Response } from 'express';
 import HttpException from '../utils/httpException.util';
 import mapError from '../utils/mapError.util';
 import checkoutSchema from './schemas/checkout.schema';
-import { IOrder } from '../Interfaces/IOrder';
+import { IOrderCheckout } from '../Interfaces/IOrder';
 
 const validateCheckoutMiddleware = (req: Request, _res: Response, next: NextFunction) => {
-  const { sellerId, totalPrice, deliveryAddress, deliveryNumber, products }: IOrder = req.body;
+  // eslint-disable-next-line operator-linebreak
+  const { sellerId, totalPrice, deliveryAddress, deliveryNumber, products }: IOrderCheckout =
+    req.body;
+
   const { error } = checkoutSchema.validate({
     sellerId,
     totalPrice,

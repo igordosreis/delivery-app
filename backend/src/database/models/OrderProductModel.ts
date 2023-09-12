@@ -42,7 +42,7 @@ OrderProductModel.init(
 );
 
 OrderProductModel.belongsTo(OrderModel, { foreignKey: 'orderId', as: 'order' });
-OrderModel.hasMany(OrderModel, { foreignKey: 'orderId', as: 'order' });
+OrderModel.hasMany(OrderProductModel, { foreignKey: 'orderId', as: 'order' });
 
 OrderProductModel.belongsTo(ProductModel, {
   foreignKey: 'productId',
