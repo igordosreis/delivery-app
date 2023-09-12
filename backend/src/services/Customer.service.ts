@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import sequelize from '../database/models';
 import { IOrderCheckout } from '../Interfaces/IOrder';
 import { IProduct } from '../Interfaces/IProduct';
@@ -25,7 +26,10 @@ export default class CustomerService {
     return allSellers;
   }
 
-  public static async createOrder(orderInfo: IOrderCheckout, userId: number): Promise<number> {
+  public static async createOrder(
+    orderInfo: IOrderCheckout,
+    userId: number | string,
+  ): Promise<number> {
     const { sellerId, totalPrice, deliveryAddress, deliveryNumber, products } = orderInfo;
     const t = await sequelize.transaction();
 
