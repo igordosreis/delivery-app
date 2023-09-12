@@ -39,7 +39,7 @@ export default class OrderService {
       },
     });
 
-    return { validatedOrderId, totalPrice, orderDate, status, userName, products };
+    return { orderId, totalPrice, orderDate, status, userName, products };
   }
 
   public static async updateStatus(

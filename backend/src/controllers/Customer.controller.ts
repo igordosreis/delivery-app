@@ -16,6 +16,7 @@ export default class CustomerController {
 
   public static async checkoutCustomerOder(req: Request, res: Response): Promise<void> {
     const { user, ...orderInfo } = req.body;
+
     const id = await CustomerService.checkoutCustomerOder(orderInfo, user);
 
     res.status(201).json({ id });
