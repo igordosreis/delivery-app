@@ -8,7 +8,7 @@ const validateOrderId = async (
   orderId: number | string,
   userRole: string,
   userId: string | number,
-): Promise<IOrderWithSellerInfo | null> => {
+): Promise<IOrderWithSellerInfo> => {
   const orderInfo = await OrderModel.findOne({
     where: { id: orderId, [userRole]: userId },
     include: [
@@ -20,9 +20,8 @@ const validateOrderId = async (
     ],
   });
 
-  const isOrderNotFound = !orderId;
-  if (isOrderNotFound) throw new HttpException(404, 'Order not found');
-  // if (!orderInfo) throw new Error('Order not found');
+  // const isOrderNotFound = !orderId;
+  if (!orderInfo) throw new HttpException(404, 'Order not found');
 
   return orderInfo as unknown as IOrderWithSellerInfo;
 };

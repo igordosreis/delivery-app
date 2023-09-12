@@ -21,7 +21,13 @@ export default class OrderService {
     const userRole = role === 'seller' ? 'sellerId' : 'userId';
 
     const validatedOrder = await validateOrderId(orderId, userRole, userId);
-    const { totalPrice, orderDate, status, id: validatedOrderId } = validatedOrder || {};
+    const {
+      totalPrice,
+      orderDate,
+      status,
+      id: validatedOrderId,
+      seller: { userName },
+    } = validatedOrder;
 
     const products = await OrderProductModel.findAll({
       where: { orderId: validatedOrderId },
@@ -32,9 +38,6 @@ export default class OrderService {
         attributes: ['id', 'userName', 'price', 'urlImage'],
       },
     });
-
-    // typescript sequelize workaround
-    const userName = validatedOrder?.seller?.userName;
 
     return { validatedOrderId, totalPrice, orderDate, status, userName, products };
   }
