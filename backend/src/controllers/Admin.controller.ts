@@ -9,4 +9,12 @@ export default class AdminController {
 
     res.status(201).end();
   }
+
+  public static async getAllUsers(req: Request, res: Response): Promise<void> {
+    const { user } = req.body;
+
+    const allUsers = await AdminService.getAllUsers(user);
+
+    res.status(200).json(allUsers);
+  }
 }
