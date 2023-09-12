@@ -6,5 +6,6 @@ const orderRouter = Router();
 
 orderRouter.get('/', validateTokenMiddleware, OrderController.getAllOrders);
 orderRouter.get('/:id', validateTokenMiddleware, OrderController.getOrderById);
+orderRouter.patch('/:id', validateTokenMiddleware, OrderController.updateStatus);
 
 export default orderRouter;

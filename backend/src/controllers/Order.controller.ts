@@ -19,8 +19,9 @@ export default class OrderController {
   }
 
   public static async updateStatus(req: Request, res: Response): Promise<void> {
-    const { user } = req.body;
-    const id = await OrderService;
+    const { status, user } = req.body;
+    const { id } = req.params;
+    await OrderService.updateStatus(id, status, user);
 
     res.status(201).json({ user, id });
   }

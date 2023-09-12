@@ -36,10 +36,14 @@ export default class OrderService {
     // typescript sequelize workaround
     const userName = validatedOrder?.seller?.userName;
 
-    return { orderId, totalPrice, orderDate, status, userName, products };
+    return { validatedOrderId, totalPrice, orderDate, status, userName, products };
   }
 
-  public static async updateStatus(orderId: number, status: string, { role }: IUserLogged) {
+  public static async updateStatus(
+    orderId: number | string,
+    status: string,
+    { role }: IUserLogged,
+  ) {
     const isUserCustomer = role === 'customer';
     if (isUserCustomer) await validateStatus(orderId, status);
     await OrderModel.update({ status }, { where: { id: orderId } });

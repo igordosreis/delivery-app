@@ -27,7 +27,7 @@ const validateOrderId = async (
   return orderInfo as unknown as IOrderWithSellerInfo;
 };
 
-const validateStatus = async (id: number, status: string): Promise<void> => {
+const validateStatus = async (id: number | string, status: string): Promise<void> => {
   const orderInfo = await OrderModel.findOne({ where: { id } });
 
   const isStatusInvalid = orderInfo?.status !== 'Em Trânsito' || status !== 'Entregue';
