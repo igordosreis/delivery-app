@@ -2,7 +2,11 @@ import { Op } from 'sequelize';
 import { Md5 } from 'ts-md5';
 import { IUser, IUserCreate, IUserLogged } from '../Interfaces/IUser';
 import UserModel from '../database/models/UserModel';
-import { validateEmail, validateUserAuthorization } from './validations/admin.validation';
+import {
+  validateEmail,
+  validateId,
+  validateUserAuthorization,
+} from './validations/admin.validation';
 
 export default class AdminService {
   public static async createNewUser(
@@ -27,5 +31,12 @@ export default class AdminService {
     });
 
     return allUsers;
+  }
+
+  public static async deleteUserById(id: string | number, { role }: IUserLogged) {
+    validateUserAuthorization(role);
+    await validateId(id);
+
+    await UserModel.destroy({ where: { id } });
   }
 }
