@@ -12,5 +12,6 @@ adminRouter.get(
   validateCreateNewUserMiddleware,
   AdminController.getAllUsers,
 );
+adminRouter.delete('/:id', validateTokenMiddleware, AdminController.deleteUserById);
 
 export default adminRouter;

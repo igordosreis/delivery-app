@@ -17,4 +17,13 @@ export default class AdminController {
 
     res.status(200).json(allUsers);
   }
+
+  public static async deleteUserById(req: Request, res: Response): Promise<void> {
+    const { user } = req.body;
+    const { id } = req.params;
+
+    await AdminService.deleteUserById(id, user);
+
+    res.status(204).end();
+  }
 }
