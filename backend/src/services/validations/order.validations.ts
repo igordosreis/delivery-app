@@ -5,7 +5,7 @@ import UserModel from '../../database/models/UserModel';
 import HttpException from '../../utils/httpException.util';
 
 const validateOrderId = async (
-  orderId: number,
+  orderId: number | string,
   userRole: string,
   userId: string | number,
 ): Promise<IOrderWithSellerInfo | null> => {

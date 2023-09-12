@@ -17,7 +17,7 @@ export default class OrderService {
     return allOrders;
   }
 
-  public static async getOrderById(orderId: number, { id: userId, role }: IUserLogged) {
+  public static async getOrderById(orderId: number | string, { id: userId, role }: IUserLogged) {
     const userRole = role === 'seller' ? 'sellerId' : 'userId';
 
     const validatedOrder = await validateOrderId(orderId, userRole, userId);

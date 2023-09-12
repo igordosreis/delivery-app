@@ -9,8 +9,11 @@ export default class OrderController {
     res.status(200).json(allOrders);
   }
 
-  public static async getOrderById(_req: Request, res: Response): Promise<void> {
-    const allSellers = await OrderService;
+  public static async getOrderById(req: Request, res: Response): Promise<void> {
+    const { user } = req.body;
+    const { id } = req.params;
+
+    const allSellers = await OrderService.getOrderById(id, user);
 
     res.status(200).json(allSellers);
   }
