@@ -22,7 +22,9 @@ export type IUserLogin = Omit<IUserDb, 'id' | 'userName' | 'role'>;
 //   password: string;
 // }
 
-export type IUserNew = Omit<IUserDb, 'id' | 'role'>;
+export type IUserRegister = Omit<IUserDb, 'id' | 'role'>;
+
+export type IUserCreate = Omit<IUserDb, 'id'>;
 
 // export interface IUserLogin extends Omit<IUserDb, 'id' | 'role'> {}
 

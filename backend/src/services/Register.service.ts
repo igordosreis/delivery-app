@@ -1,5 +1,5 @@
 import { Md5 } from 'ts-md5';
-import { IUserLogged, IUserNew } from '../Interfaces/IUser';
+import { IUserLogged, IUserRegister } from '../Interfaces/IUser';
 import UserModel from '../database/models/UserModel';
 import { createToken } from '../utils/jwt.util';
 import validateRegisterEmail from './validations/register.validation';
@@ -9,7 +9,7 @@ export default class RegisterService {
     userName,
     email,
     password,
-  }: IUserNew): Promise<IUserLogged> {
+  }: IUserRegister): Promise<IUserLogged> {
     const [user, created] = await UserModel.findOrCreate({
       where: { email },
       defaults: { userName, password: Md5.hashStr(password) },

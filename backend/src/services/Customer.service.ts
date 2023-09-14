@@ -5,9 +5,9 @@ import { IProduct } from '../Interfaces/IProduct';
 import { IUserDb, IUserLogged } from '../Interfaces/IUser';
 import ProductModel from '../database/models/ProductModel';
 import UserModel from '../database/models/UserModel';
-import validateOrderInfo from './validations/customer.validation';
 import OrderModel from '../database/models/OrderModel';
 import OrderProductModel from '../database/models/OrderProductModel';
+import validateOrderInfo from './validations/customer.validation';
 import HttpException from '../utils/httpException.util';
 
 export default class CustomerService {
