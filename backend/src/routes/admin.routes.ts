@@ -5,13 +5,13 @@ import validateCreateNewUserMiddleware from '../middlewares/admin.middleware';
 
 const adminRouter = Router();
 
-adminRouter.post('/', validateTokenMiddleware, AdminController.createNewUser);
-adminRouter.get(
+adminRouter.post(
   '/',
   validateTokenMiddleware,
   validateCreateNewUserMiddleware,
-  AdminController.getAllUsers,
+  AdminController.createNewUser,
 );
+adminRouter.get('/', validateTokenMiddleware, AdminController.getAllUsers);
 adminRouter.delete('/:id', validateTokenMiddleware, AdminController.deleteUserById);
 
 export default adminRouter;

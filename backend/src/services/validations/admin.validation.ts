@@ -12,7 +12,7 @@ const validateId = async (id: string | number): Promise<void> => {
 };
 
 const validateUserAuthorization = (role: string): void => {
-  const isUserNotAdmin = role === 'administrator';
+  const isUserNotAdmin = role !== 'administrator';
   if (isUserNotAdmin) throw new HttpException(401, 'Unauthorized');
 };
 
