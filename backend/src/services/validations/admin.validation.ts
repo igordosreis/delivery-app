@@ -7,7 +7,8 @@ const validateEmail = async (email: string): Promise<void> => {
 };
 
 const validateId = async (id: string | number): Promise<void> => {
-  const isIdInvalid = await UserModel.findByPk(id);
+  const user = await UserModel.findByPk(id);
+  const isIdInvalid = !user;
   if (isIdInvalid) throw new HttpException(404, 'User not found');
 };
 
