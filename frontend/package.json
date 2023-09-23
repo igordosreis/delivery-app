@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "Frontend boilerplate",
   "author": "Igor dos Reis",
-  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,12 +11,15 @@
     "check-types": "tsc --noEmit --skipLibCheck"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "1.9.5",
     "@types/node": "20.4.6",
     "@types/react": "18.2.18",
     "@types/react-dom": "18.2.7",
+    "@types/react-redux": "^7.1.26",
     "next": "13.4.12",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-redux": "8.1.2"
   },
   "volta": {
     "extends": "../package.json"
