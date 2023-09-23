@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "Frontend boilerplate",
   "author": "Igor dos Reis",
-  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
