@@ -21,11 +21,11 @@ module.exports = {
       },
       {
         id: 3,
-        user_name: 'Client User',
-        role: 'client',
-        email: 'client@email.com',
-        password: '3677b23baa08f74c28aba07f0cb6554e',
-        // decrypted md5 password: client123
+        user_name: 'Customer User',
+        role: 'customer',
+        email: 'customer@email.com',
+        password: 'f4ad231214cb99a985dff0f056a36242',
+        // decrypted md5 password: customer123
       },
     ], {});
   },

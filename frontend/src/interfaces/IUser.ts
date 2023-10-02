@@ -4,3 +4,8 @@ export interface IUser {
   role: string;
   token: string;
 }
+
+export interface IUserLogin {
+  email: string;
+  password: string;
+}
