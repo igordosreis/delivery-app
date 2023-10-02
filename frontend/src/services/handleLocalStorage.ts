@@ -7,8 +7,13 @@ export const saveUserDataOnLocalStorage = (data: IUser) => {
   localStorage.setItem(LS_KEY_USER, JSON.stringify(data));
 };
 
-export const getUserDataOnLocalStorage = () =>
-  JSON.parse(localStorage.getItem(LS_KEY_USER) || '') || {};
+export const getUserDataOnLocalStorage = () => {
+  const retrivedUser = localStorage.getItem(LS_KEY_USER);
+  if (retrivedUser) {
+    return JSON.parse(retrivedUser) || {};
+  }
+  return {};
+};
 
 export const deleteUserDataOnLocalStorage = () => {
   localStorage.removeItem(LS_KEY_USER);

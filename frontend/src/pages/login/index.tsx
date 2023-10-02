@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 
 import { IUser } from '@/interfaces/IUser';
-
+import postLogin from '@/services/handleLoginRequests';
+import { login } from '@/redux/features/users/userSlice';
+import {
+  getUserDataOnLocalStorage,
+  saveUserDataOnLocalStorage,
+} from '@/services/handleLocalStorage';
 import {
   HTTP_OK,
   NUM_PASSWORD_MIN_LENGTH,
@@ -16,19 +23,11 @@ import {
   ROLE_ADMIN,
   ROLE_CUSTOMER,
   ROLE_SELLER,
-} from '../../constants';
-// import { userLoginAction } from '../../redux/actions';
-import {
-  getUserDataOnLocalStorage,
-  saveUserDataOnLocalStorage,
-} from '../../services/handleLocalStorage';
-
-// import postLogin from '../../services/handleLoginRequests';
-import '../../styles/Common.css';
+} from '@/constants';
 
 export default function Login() {
-  // const history = useHistory();
-  // const dispatch = useDispatch();
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [isUserNotFound, setUserIsNotFound] = useState(false);
@@ -56,39 +55,40 @@ export default function Login() {
     setPasswordInput(value);
 
   const saveUserDataAndGoToNextPage = (userData: IUser) => {
-    // saveUserDataOnLocalStorage(userData);
-    // dispatch(userLoginAction(userData));
+    saveUserDataOnLocalStorage(userData);
+    const payload = { userData };
+    dispatch(login(payload));
 
     const isUserAdmin = userData.role === ROLE_ADMIN;
-    const isUserCostumer = userData.role === ROLE_CUSTOMER;
+    const isUserCustomer = userData.role === ROLE_CUSTOMER;
     const isUserSeller = userData.role === ROLE_SELLER;
 
-    // if (isUserAdmin) return history.push(`/${PATH_ADMIN}/${PATH_MANAGE}`);
-    // if (isUserCostumer) return history.push(`/${PATH_CUSTOMER}/${PATH_PRODUCTS}`);
-    // if (isUserSeller) return history.push(`/${PATH_SELLER}/${PATH_ORDERS}`);
+    if (isUserAdmin) return router.push(`/${PATH_ADMIN}/${PATH_MANAGE}`);
+    if (isUserCustomer) return router.push(`/${PATH_CUSTOMER}/${PATH_PRODUCTS}`);
+    if (isUserSeller) return router.push(`/${PATH_SELLER}/${PATH_ORDERS}`);
   };
 
-  // const handleLoginResponse = (response) => {
-  //   const { userData, status } = response;
-  //   const isLoginResponseValid = status === HTTP_OK;
-  //   if (isLoginResponseValid) {
-  //     saveUserDataAndGoToNextPage(userData);
-  //   } else {
-  //     setUserIsNotFound(true);
-  //   }
-  // };
+  const handleLoginResponse = (response: { userData: IUser; status: number }) => {
+    const { userData, status } = response;
+    const isLoginResponseValid = status === HTTP_OK;
+    if (isLoginResponseValid) {
+      saveUserDataAndGoToNextPage(userData);
+    } else {
+      setUserIsNotFound(true);
+    }
+  };
 
   const handleEnterButtonClick = async (
     event: React.MouseEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
     const request = { email: emailInput, password: passwordInput };
-    // const response = await postLogin(request);
-    // handleLoginResponse(response);
+    const response = await postLogin(request);
+    handleLoginResponse(response);
   };
 
   const handleRegisterButtonClick = () => {
-    // history.push(`/${PATH_REGISTER}`);
+    router.push(`/${PATH_REGISTER}`);
   };
 
   useEffect(() => {
