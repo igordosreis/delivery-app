@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 
 import { IUser } from '@/interfaces/IUser';
-import postLogin from '@/services/handleLoginRequests';
-import { login } from '@/redux/features/users/userSlice';
+import { useLoginUserMutation } from '@/redux/features/users/userSlice';
 import {
   getUserDataOnLocalStorage,
   saveUserDataOnLocalStorage,
 } from '@/services/handleLocalStorage';
 import {
-  HTTP_OK,
   NUM_PASSWORD_MIN_LENGTH,
   PATH_ADMIN,
   PATH_CUSTOMER,
@@ -27,7 +24,8 @@ import {
 
 export default function Login() {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const [loginUser, { data, isError, isSuccess, isUninitialized, status }] =
+    useLoginUserMutation();
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [isUserNotFound, setUserIsNotFound] = useState(false);
@@ -56,8 +54,6 @@ export default function Login() {
 
   const saveUserDataAndGoToNextPage = (userData: IUser) => {
     saveUserDataOnLocalStorage(userData);
-    const payload = { userData };
-    dispatch(login(payload));
 
     const isUserAdmin = userData.role === ROLE_ADMIN;
     const isUserCustomer = userData.role === ROLE_CUSTOMER;
@@ -68,23 +64,39 @@ export default function Login() {
     if (isUserSeller) return router.push(`/${PATH_SELLER}/${PATH_ORDERS}`);
   };
 
-  const handleLoginResponse = (response: { userData: IUser; status: number }) => {
-    const { userData, status } = response;
-    const isLoginResponseValid = status === HTTP_OK;
-    if (isLoginResponseValid) {
-      saveUserDataAndGoToNextPage(userData);
+  // console.log('data outside: ', data);
+  // console.log('isError outside: ', isError);
+  // console.log('isSuccess outside: ', isSuccess);
+  // console.log('isUninitialized outside: ', isUninitialized);
+  // console.log('status outside: ', status);
+  const handleLoginResponse = () => {
+    // console.log('data inside: ', data);
+    // console.log('isError inside: ', isError);
+    // console.log('isSuccess inside: ', isSuccess);
+    // console.log('isUninitialized inside: ', isUninitialized);
+    // console.log('status inside: ', status);
+    // console.log('payload any inside: ', payload);
+    // const isLoginResponseValid = status === HTTP_OK;
+    if (isSuccess) {
+      saveUserDataAndGoToNextPage(data);
     } else {
       setUserIsNotFound(true);
     }
   };
+
+  useEffect(() => {
+    if (isSuccess || isError) {
+      handleLoginResponse();
+    }
+  }, [isSuccess, isError]);
 
   const handleEnterButtonClick = async (
     event: React.MouseEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
     const request = { email: emailInput, password: passwordInput };
-    const response = await postLogin(request);
-    handleLoginResponse(response);
+
+    await loginUser(request);
   };
 
   const handleRegisterButtonClick = () => {

@@ -10,7 +10,11 @@ export const saveUserDataOnLocalStorage = (data: IUser) => {
 export const getUserDataOnLocalStorage = () => {
   const retrivedUser = localStorage.getItem(LS_KEY_USER);
   if (retrivedUser) {
-    return JSON.parse(retrivedUser) || {};
+    try {
+      return JSON.parse(retrivedUser);
+    } catch (error) {
+      return {};
+    }
   }
   return {};
 };
