@@ -22,14 +22,13 @@ import { RootState } from '@/redux/store';
 
 export default function Login() {
   const router = useRouter();
-  const [loginUser, { data: fetchedUserData, isError, isSuccess }] =
-    useLoginUserMutation();
-  const [emailInput, setEmailInput] = useState('');
-  const [passwordInput, setPasswordInput] = useState('');
-  const [isUserNotFound, setUserIsNotFound] = useState(false);
+  const [loginUser] = useLoginUserMutation();
   const userData = useSelector(
     (state: RootState) => state.reducer.authSlice.userData
   );
+  const [emailInput, setEmailInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
+  const [isUserNotFound, setUserIsNotFound] = useState(false);
 
   // Validation
   const validateInputFields = () => {
@@ -53,31 +52,30 @@ export default function Login() {
   }: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) =>
     setPasswordInput(value);
 
-  const goToNextPage = (userData: IUser | undefined) => {
-    if (userData) {
-      const isUserAdmin = userData.role === ROLE_ADMIN;
-      const isUserCustomer = userData.role === ROLE_CUSTOMER;
-      const isUserSeller = userData.role === ROLE_SELLER;
+  const goToNextPage = (userData: IUser) => {
+    const isUserAdmin = userData.role === ROLE_ADMIN;
+    const isUserCustomer = userData.role === ROLE_CUSTOMER;
+    const isUserSeller = userData.role === ROLE_SELLER;
 
-      if (isUserAdmin) return router.push(`/${PATH_ADMIN}/${PATH_MANAGE}`);
-      if (isUserCustomer) return router.push(`/${PATH_CUSTOMER}/${PATH_PRODUCTS}`);
-      if (isUserSeller) return router.push(`/${PATH_SELLER}/${PATH_ORDERS}`);
-    }
+    if (isUserAdmin) return router.push(`/${PATH_ADMIN}/${PATH_MANAGE}`);
+    if (isUserCustomer) return router.push(`/${PATH_CUSTOMER}/${PATH_PRODUCTS}`);
+    if (isUserSeller) return router.push(`/${PATH_SELLER}/${PATH_ORDERS}`);
   };
 
-  const handleLoginResponse = () => {
-    if (isSuccess) {
-      goToNextPage(fetchedUserData);
-    } else {
-      setUserIsNotFound(true);
-    }
-  };
+  // const [loginUser, { data: newData, isError, isSuccess, isLoading }] = useLoginUserMutation();
+  // const handleLoginResponse = () => {
+  //   if (isSuccess) {
+  //     goToNextPage(fetchedUserData);
+  //   } else {
+  //     setUserIsNotFound(true);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (isSuccess || isError) {
-      handleLoginResponse();
-    }
-  }, [isSuccess, isError]);
+  // useEffect(() => {
+  //   if (isSuccess || isError) {
+  //     handleLoginResponse();
+  //   }
+  // }, [isSuccess, isError]);
 
   const handleEnterButtonClick = async (
     event: React.MouseEvent<HTMLFormElement>
@@ -85,7 +83,12 @@ export default function Login() {
     event.preventDefault();
     const request = { email: emailInput, password: passwordInput };
 
-    await loginUser(request);
+    try {
+      const payload = await loginUser(request).unwrap();
+      goToNextPage(payload);
+    } catch (error) {
+      setUserIsNotFound(true);
+    }
   };
 
   const handleRegisterButtonClick = () => {
@@ -93,8 +96,8 @@ export default function Login() {
   };
 
   useEffect(() => {
-    const isUserFound = userData;
-    if (isUserFound) goToNextPage(userData);
+    const isUserPersisted = userData;
+    if (isUserPersisted) goToNextPage(userData);
   }, []);
 
   // Rendering
