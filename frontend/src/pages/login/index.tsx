@@ -62,6 +62,7 @@ export default function Login() {
     if (isUserSeller) return router.push(`/${PATH_SELLER}/${PATH_ORDERS}`);
   };
 
+  // To set a loading spinner, use a logic similar to the one below:
   // const [loginUser, { data: newData, isError, isSuccess, isLoading }] = useLoginUserMutation();
   // const handleLoginResponse = () => {
   //   if (isSuccess) {
