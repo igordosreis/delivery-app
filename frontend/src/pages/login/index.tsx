@@ -93,9 +93,9 @@ export default function Login() {
   };
 
   useEffect(() => {
-    const userFromLocalStorage = getUserDataOnLocalStorage();
-    const isUserFound = Object.keys(userFromLocalStorage).length > 0;
-    if (isUserFound) saveUserDataAndGoToNextPage(userFromLocalStorage);
+    // const userFromLocalStorage = getUserDataOnLocalStorage();
+    // const isUserFound = Object.keys(userFromLocalStorage).length > 0;
+    // if (isUserFound) saveUserDataAndGoToNextPage(userFromLocalStorage);
   }, []);
 
   // Rendering

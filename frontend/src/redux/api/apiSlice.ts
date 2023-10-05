@@ -7,7 +7,7 @@ export const deliveryApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:3071',
     prepareHeaders: (headers, { getState }) => {
-      const token = (getState() as RootState).authSlice.userData?.token;
+      const token = (getState() as RootState).reducer.authSlice.userData;
       if (token) {
         headers.set('authorization', `${token}`);
       }
