@@ -31,9 +31,16 @@ const persistedReducer = persistReducer<RootReducer, AnyAction>(
   rootReducer
 );
 
+//To persist the state of only one reducer, use the commented config below:
+// const persistedAuthReducer = persistReducer<RootReducer, AnyAction>(
+//   persistConfig,
+//   authReducer,
+// );
+
 export const store = configureStore({
   reducer: {
     reducer: persistedReducer,
+    //autoSlice: persistedAuthReducer,
     [deliveryApi.reducerPath]: deliveryApi.reducer,
   },
   devTools: true,

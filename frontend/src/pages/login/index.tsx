@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useSelector } from 'react-redux';
 
 import { IUser } from '@/interfaces/IUser';
 import { useLoginUserMutation } from '@/redux/api/services/userSlice';
-import {
-  getUserDataOnLocalStorage,
-  saveUserDataOnLocalStorage,
-} from '@/services/handleLocalStorage';
 import {
   NUM_PASSWORD_MIN_LENGTH,
   PATH_ADMIN,
@@ -21,13 +18,18 @@ import {
   ROLE_CUSTOMER,
   ROLE_SELLER,
 } from '@/constants';
+import { RootState } from '@/redux/store';
 
 export default function Login() {
   const router = useRouter();
-  const [loginUser, { data, isError, isSuccess }] = useLoginUserMutation();
+  const [loginUser, { data: fetchedUserData, isError, isSuccess }] =
+    useLoginUserMutation();
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [isUserNotFound, setUserIsNotFound] = useState(false);
+  const userData = useSelector(
+    (state: RootState) => state.reducer.authSlice.userData
+  );
 
   // Validation
   const validateInputFields = () => {
@@ -51,10 +53,8 @@ export default function Login() {
   }: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) =>
     setPasswordInput(value);
 
-  const saveUserDataAndGoToNextPage = (userData: IUser | undefined) => {
+  const goToNextPage = (userData: IUser | undefined) => {
     if (userData) {
-      saveUserDataOnLocalStorage(userData);
-
       const isUserAdmin = userData.role === ROLE_ADMIN;
       const isUserCustomer = userData.role === ROLE_CUSTOMER;
       const isUserSeller = userData.role === ROLE_SELLER;
@@ -67,7 +67,7 @@ export default function Login() {
 
   const handleLoginResponse = () => {
     if (isSuccess) {
-      saveUserDataAndGoToNextPage(data);
+      goToNextPage(fetchedUserData);
     } else {
       setUserIsNotFound(true);
     }
@@ -93,9 +93,8 @@ export default function Login() {
   };
 
   useEffect(() => {
-    // const userFromLocalStorage = getUserDataOnLocalStorage();
-    // const isUserFound = Object.keys(userFromLocalStorage).length > 0;
-    // if (isUserFound) saveUserDataAndGoToNextPage(userFromLocalStorage);
+    const isUserFound = userData;
+    if (isUserFound) goToNextPage(userData);
   }, []);
 
   // Rendering
