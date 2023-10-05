@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { IUser } from '@/interfaces/IUser';
-import { useLoginUserMutation } from '@/redux/features/users/userSlice';
+import { useLoginUserMutation } from '@/redux/api/services/userSlice';
 import {
   getUserDataOnLocalStorage,
   saveUserDataOnLocalStorage,
@@ -24,8 +24,7 @@ import {
 
 export default function Login() {
   const router = useRouter();
-  const [loginUser, { data, isError, isSuccess, isUninitialized, status }] =
-    useLoginUserMutation();
+  const [loginUser, { data, isError, isSuccess }] = useLoginUserMutation();
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [isUserNotFound, setUserIsNotFound] = useState(false);
@@ -52,31 +51,21 @@ export default function Login() {
   }: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) =>
     setPasswordInput(value);
 
-  const saveUserDataAndGoToNextPage = (userData: IUser) => {
-    saveUserDataOnLocalStorage(userData);
+  const saveUserDataAndGoToNextPage = (userData: IUser | undefined) => {
+    if (userData) {
+      saveUserDataOnLocalStorage(userData);
 
-    const isUserAdmin = userData.role === ROLE_ADMIN;
-    const isUserCustomer = userData.role === ROLE_CUSTOMER;
-    const isUserSeller = userData.role === ROLE_SELLER;
+      const isUserAdmin = userData.role === ROLE_ADMIN;
+      const isUserCustomer = userData.role === ROLE_CUSTOMER;
+      const isUserSeller = userData.role === ROLE_SELLER;
 
-    if (isUserAdmin) return router.push(`/${PATH_ADMIN}/${PATH_MANAGE}`);
-    if (isUserCustomer) return router.push(`/${PATH_CUSTOMER}/${PATH_PRODUCTS}`);
-    if (isUserSeller) return router.push(`/${PATH_SELLER}/${PATH_ORDERS}`);
+      if (isUserAdmin) return router.push(`/${PATH_ADMIN}/${PATH_MANAGE}`);
+      if (isUserCustomer) return router.push(`/${PATH_CUSTOMER}/${PATH_PRODUCTS}`);
+      if (isUserSeller) return router.push(`/${PATH_SELLER}/${PATH_ORDERS}`);
+    }
   };
 
-  // console.log('data outside: ', data);
-  // console.log('isError outside: ', isError);
-  // console.log('isSuccess outside: ', isSuccess);
-  // console.log('isUninitialized outside: ', isUninitialized);
-  // console.log('status outside: ', status);
   const handleLoginResponse = () => {
-    // console.log('data inside: ', data);
-    // console.log('isError inside: ', isError);
-    // console.log('isSuccess inside: ', isSuccess);
-    // console.log('isUninitialized inside: ', isUninitialized);
-    // console.log('status inside: ', status);
-    // console.log('payload any inside: ', payload);
-    // const isLoginResponseValid = status === HTTP_OK;
     if (isSuccess) {
       saveUserDataAndGoToNextPage(data);
     } else {

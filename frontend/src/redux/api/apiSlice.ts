@@ -1,8 +1,19 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+import { RootState } from '../store';
+
 export const deliveryApi = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3071' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'http://localhost:3071',
+    prepareHeaders: (headers, { getState }) => {
+      const token = (getState() as RootState).authSlice.userData?.token;
+      if (token) {
+        headers.set('authorization', `${token}`);
+      }
+      return headers;
+    },
+  }),
   tagTypes: ['User', 'Cart', 'Order'],
   endpoints: (builder) => ({}),
 });

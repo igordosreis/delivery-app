@@ -2,10 +2,11 @@ import { configureStore } from '@reduxjs/toolkit';
 
 // import userReducer from './features/users/userSlice';
 import { deliveryApi } from './api/apiSlice';
+import authReducer from './features/auth/authSlice';
 
 export const store = configureStore({
   reducer: {
-    // userState: userReducer,
+    authSlice: authReducer,
     [deliveryApi.reducerPath]: deliveryApi.reducer,
   },
   devTools: true,
