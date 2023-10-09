@@ -1,10 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { deliveryApi } from '@/redux/api/apiSlice';
 import { IUser } from '@/interfaces/IUser';
-import { PATH_LOGIN } from '@/constants';
-import { extendedApiSlice } from '@/redux/api/services/userSlice';
+import { userApiSlice } from '@/redux/api/services/userSlice';
 import { RootState } from '@/redux/store';
 
 interface UserState {
@@ -21,7 +18,7 @@ export const authSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
-      extendedApiSlice.endpoints.loginUser.matchFulfilled,
+      userApiSlice.endpoints.loginUser.matchFulfilled,
       (state, { payload }) => {
         state.userData = payload;
       }
