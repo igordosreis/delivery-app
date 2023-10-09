@@ -24,13 +24,16 @@ import {
 function Products() {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { data, error, isLoading } = useGetProductsQuery();
+  const { data, ...fetchResult } = useGetProductsQuery();
+  const cart = useAppSelector((state) => state.reducer.cartSlice.cartData);
   // const [data] = useAuthFetch(getProducts);
   // const {
   //   cart: { currentCart },
   // } = useSelector((state) => state);
   // const [productQuantity, setProductQuantity] = useState(currentCart);
-
+  // console.log('data: ', data);
+  // console.log('fetchResult: ', fetchResult);
+  // console.log('isLoading: ', isLoading);
   // Handlers
   // const handleAddButtonClick = ({
   //   target: {

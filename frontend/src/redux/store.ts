@@ -1,4 +1,4 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore, createReducer } from '@reduxjs/toolkit';
 import type { AnyAction } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import {
@@ -12,11 +12,13 @@ import {
   REGISTER,
 } from 'redux-persist';
 
-import { deliveryApi } from './api/apiSlice';
-import authReducer from './features/auth/authSlice';
+import { deliveryApi } from '@/redux/api/apiSlice';
+import authReducer from '@/redux/features/auth/authSlice';
+import cartReducer from '@/redux/features/cart/cartSlice';
 
 const rootReducer = combineReducers({
   authSlice: authReducer,
+  cartSlice: cartReducer,
 });
 
 export type RootReducer = ReturnType<typeof rootReducer>;
