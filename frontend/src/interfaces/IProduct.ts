@@ -6,6 +6,15 @@ export interface IProduct {
   stock: number;
 }
 
+export interface IProductAction {
+  id: number | string;
+  productname: string;
+  price: string;
+}
+export interface IProductInCart extends IProductAction {
+  quantity: number;
+}
+
 export interface ICart {
-  [key: number]: IProduct;
+  [id: number | string]: IProductInCart;
 }

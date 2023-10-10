@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 
-import { useAppSelector } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { useGetProductsQuery } from '@/redux/api/services/productsSlice';
+import useLogoutOnError from '@/services/useLogoutOnError';
 import {
   BUTTON_ADD_ITEM,
   BUTTON_CART,
@@ -17,45 +17,26 @@ import {
   PATH_CHECKOUT,
   PATH_CUSTOMER,
 } from '@/constants';
-import useLogoutOnError from '@/services/useLogoutOnError';
-
-// import { saveCartAcion } from '../../redux/actions';
-// import { saveCartOnLocalStorage } from '../../services/handleLocalStorage';
+import { addProduct } from '@/redux/features/cart/cartSlice';
+import { ICart } from '@/interfaces/IProduct';
 
 function Products() {
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { data, isError, error } = useGetProductsQuery();
   const cart = useAppSelector((state) => state.reducer.cartSlice.cartData);
   useLogoutOnError(isError, error);
-  // const [data] = useAuthFetch(getProducts);
-  // const {
-  //   cart: { currentCart },
-  // } = useSelector((state) => state);
-  // const [productQuantity, setProductQuantity] = useState(currentCart);
-  // console.log('data: ', data);
-  // console.log('error: ', error);
-  // console.log('isLoading: ', isLoading);
-  // Handlers
-  // const handleAddButtonClick = ({
-  //   target: {
-  //     dataset: { id, name, price },
-  //   },
-  // }) => {
-  //   setProductQuantity((prevState) => {
-  //     const newState = {
-  //       ...prevState,
-  //       [id]: {
-  //         quantity: (prevState[id]?.quantity || 0) + 1,
-  //         name,
-  //         price,
-  //         id,
-  //       },
-  //     };
 
-  //     return newState;
-  //   });
-  // };
+  // Handlers
+  const handleAddButtonClick = ({
+    currentTarget: {
+      dataset: { id, productname, price },
+    },
+  }: React.MouseEvent<HTMLElement>) => {
+    if (id && productname && price) {
+      dispatch(addProduct({ id, productname, price }));
+    }
+  };
 
   // const handleRemoveButtonClick = ({
   //   target: {
@@ -141,6 +122,9 @@ function Products() {
     const productsCardsArray =
       data &&
       data.map(({ id, productName, price, urlImage }) => {
+        const cartData = cart as ICart;
+        const cartItem = cartData[id];
+
         const card = (
           <div key={id} className="product-card">
             <div
@@ -176,20 +160,20 @@ function Products() {
                 <input
                   data-testid={`${CUSTOMER_PRODUCTS}${INPUT_CARD_QUANTITY}-${id}`}
                   data-id={id}
-                  data-name={productName}
+                  data-productname={productName}
                   data-price={price}
                   type="text"
-                  // onChange={handleInputOnChange}
-                  // value={productQuantity[id]?.quantity || 0}
+                  onChange={() => {}}
+                  value={(cartItem && cartItem.quantity) || 0}
                   className="product-card-bottom-0"
                 />
                 <button
                   data-testid={`${CUSTOMER_PRODUCTS}${BUTTON_ADD_ITEM}-${id}`}
                   data-id={id}
-                  data-name={productName}
+                  data-productname={productName}
                   data-price={price}
                   type="button"
-                  // onClick={handleAddButtonClick}
+                  onClick={handleAddButtonClick}
                   className="product-card-bottom-button button--"
                 >
                   +
