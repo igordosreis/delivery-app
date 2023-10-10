@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
