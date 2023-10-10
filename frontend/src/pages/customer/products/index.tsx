@@ -17,7 +17,11 @@ import {
   PATH_CHECKOUT,
   PATH_CUSTOMER,
 } from '@/constants';
-import { addProduct, removeProduct } from '@/redux/features/cart/cartSlice';
+import {
+  addProduct,
+  removeProduct,
+  inputQuantity,
+} from '@/redux/features/cart/cartSlice';
 import { ICart } from '@/interfaces/IProduct';
 
 function Products() {
@@ -48,56 +52,16 @@ function Products() {
     }
   };
 
-  // const handleInputOnChange = ({
-  //   target: {
-  //     value,
-  //     dataset: { id, name, price },
-  //   },
-  // }) => {
-  //   const isInputZero = +value === 0;
-  //   if (isInputZero) {
-  //     return setProductQuantity((prevState) => {
-  //       const { [id]: productRemovedFromCart, ...newState } = prevState;
-
-  //       return newState;
-  //     });
-  //   }
-
-  //   const isInputValidNumber = +value > 0;
-  //   if (isInputValidNumber) {
-  //     return setProductQuantity((prevState) => {
-  //       const newState = {
-  //         ...prevState,
-  //         [id]: {
-  //           quantity: +value,
-  //           name,
-  //           price,
-  //           id,
-  //         },
-  //       };
-
-  //       return newState;
-  //     });
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (isError && 'status' in error && !('error' in error)) {
-  //     const errMsg = JSON.stringify(error.data);
-  //     if (errMsg.toLowerCase().includes('token')) {
-  //       dispatch(logout());
-  //       router.push('/login');
-  //     }
-  //   }
-  // }, [isError]);
-
-  // useEffect(() => {
-  //   const saveCart = () => {
-  //     saveCartOnLocalStorage(productQuantity);
-  //     dispatch(saveCartAcion(productQuantity));
-  //   };
-  //   saveCart();
-  // }, [productQuantity]);
+  const handleInputOnChange = ({
+    currentTarget: {
+      value,
+      dataset: { id, productname, price },
+    },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    if (id && productname && price && (+value >= 0 || value.length === 0)) {
+      dispatch(inputQuantity({ id, productname, price, value }));
+    }
+  };
 
   // Rendering
   const renderProductsCards = () => {
@@ -145,8 +109,8 @@ function Products() {
                   data-productname={productName}
                   data-price={price}
                   type="text"
-                  onChange={() => {}}
-                  value={(cartItem && cartItem.quantity) || 0}
+                  onChange={handleInputOnChange}
+                  value={cartItem && cartItem.quantity ? cartItem.quantity : 0}
                   className="product-card-bottom-0"
                 />
                 <button

@@ -10,7 +10,7 @@ export interface IProductAction {
   id: number | string;
   productname?: string;
   price?: string;
-  value?: string | number;
+  value?: string;
 }
 export interface IProductInCart extends IProductAction {
   quantity: number;
