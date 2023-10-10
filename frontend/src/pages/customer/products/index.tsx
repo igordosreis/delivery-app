@@ -17,8 +17,7 @@ import {
   PATH_CHECKOUT,
   PATH_CUSTOMER,
 } from '@/constants';
-import { executeLogout } from '@/utils';
-import { logout } from '@/redux/features/auth/authSlice';
+import useLogoutOnError from '@/services/useLogoutOnError';
 
 // import { saveCartAcion } from '../../redux/actions';
 // import { saveCartOnLocalStorage } from '../../services/handleLocalStorage';
@@ -28,6 +27,7 @@ function Products() {
   const dispatch = useDispatch();
   const { data, isError, error } = useGetProductsQuery();
   const cart = useAppSelector((state) => state.reducer.cartSlice.cartData);
+  useLogoutOnError(isError, error);
   // const [data] = useAuthFetch(getProducts);
   // const {
   //   cart: { currentCart },
@@ -117,16 +117,17 @@ function Products() {
   //   }
   // };
 
-  useEffect(() => {
-    if (isError && 'status' in error) {
-      const errMsg = 'error' in error ? error.error : JSON.stringify(error.data);
-      if (errMsg.includes('Invalid token')) {
-        dispatch(logout());
-        router.push('/login');
-      }
-      // executeLogout(router);
-    }
-  }, [isError]);
+  // useEffect(() => {
+  //   if (isError && 'status' in error && !('error' in error)) {
+  //     const errMsg = JSON.stringify(error.data);
+  //     if (errMsg.toLowerCase().includes('token')) {
+  //       dispatch(logout());
+  //       router.push('/login');
+  //     }
+  //     // executeLogout(router);
+  //   }
+  // }, [isError]);
+
   // useEffect(() => {
   //   const saveCart = () => {
   //     saveCartOnLocalStorage(productQuantity);
