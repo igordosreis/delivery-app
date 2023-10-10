@@ -33,8 +33,34 @@ export const cartSlice = createSlice({
         },
       };
     },
+    removeProduct: (state, { payload }: PayloadAction<IProductAction>) => {
+      const { id } = payload;
+      const cartData: ICart = state.cartData;
+      const cartItem = cartData[id];
+
+      const isProductInCart = cartItem?.quantity;
+      const newQuantity = isProductInCart ? cartItem.quantity - 1 : 0;
+
+      const isProductStillInCart = newQuantity > 0;
+      if (isProductStillInCart) {
+        state.cartData = {
+          ...cartData,
+          [id]: {
+            ...cartItem,
+            quantity: newQuantity,
+          },
+        };
+      } else {
+        const { [id]: productRemovedFromCart, ...newState } = cartData;
+
+        state.cartData = newState;
+      }
+    },
+    emptyCart: (state) => {
+      state.cartData = {};
+    },
   },
 });
 
 export default cartSlice.reducer;
-export const { addProduct } = cartSlice.actions;
+export const { addProduct, removeProduct, emptyCart } = cartSlice.actions;

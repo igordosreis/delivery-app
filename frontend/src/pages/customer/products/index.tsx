@@ -17,7 +17,7 @@ import {
   PATH_CHECKOUT,
   PATH_CUSTOMER,
 } from '@/constants';
-import { addProduct } from '@/redux/features/cart/cartSlice';
+import { addProduct, removeProduct } from '@/redux/features/cart/cartSlice';
 import { ICart } from '@/interfaces/IProduct';
 
 function Products() {
@@ -38,32 +38,15 @@ function Products() {
     }
   };
 
-  // const handleRemoveButtonClick = ({
-  //   target: {
-  //     dataset: { id },
-  //   },
-  // }) => {
-  //   setProductQuantity((prevState) => {
-  //     const isProductInCart = prevState[id]?.quantity;
-  //     const newQuantity = isProductInCart ? prevState[id].quantity - 1 : 0;
-
-  //     const isProductStillInCart = newQuantity > 0;
-  //     if (isProductStillInCart) {
-  //       const newState = {
-  //         ...prevState,
-  //         [id]: {
-  //           ...prevState[id],
-  //           quantity: newQuantity,
-  //         },
-  //       };
-
-  //       return newState;
-  //     }
-  //     const { [id]: productRemovedFromCart, ...newState } = prevState;
-
-  //     return newState;
-  //   });
-  // };
+  const handleRemoveButtonClick = ({
+    currentTarget: {
+      dataset: { id },
+    },
+  }: React.MouseEvent<HTMLElement>) => {
+    if (id) {
+      dispatch(removeProduct({ id }));
+    }
+  };
 
   // const handleInputOnChange = ({
   //   target: {
@@ -105,7 +88,6 @@ function Products() {
   //       dispatch(logout());
   //       router.push('/login');
   //     }
-  //     // executeLogout(router);
   //   }
   // }, [isError]);
 
@@ -122,7 +104,7 @@ function Products() {
     const productsCardsArray =
       data &&
       data.map(({ id, productName, price, urlImage }) => {
-        const cartData = cart as ICart;
+        const cartData: ICart = cart;
         const cartItem = cartData[id];
 
         const card = (
@@ -152,7 +134,7 @@ function Products() {
                   data-testid={`${CUSTOMER_PRODUCTS}${BUTTON_RM_ITEM}-${id}`}
                   data-id={id}
                   type="button"
-                  // onClick={handleRemoveButtonClick}
+                  onClick={handleRemoveButtonClick}
                   className="product-card-bottom-button button-"
                 >
                   -

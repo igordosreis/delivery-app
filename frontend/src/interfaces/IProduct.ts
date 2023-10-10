@@ -8,8 +8,9 @@ export interface IProduct {
 
 export interface IProductAction {
   id: number | string;
-  productname: string;
-  price: string;
+  productname?: string;
+  price?: string;
+  value?: string | number;
 }
 export interface IProductInCart extends IProductAction {
   quantity: number;
