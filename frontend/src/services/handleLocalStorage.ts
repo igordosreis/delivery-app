@@ -1,27 +1,27 @@
-import { IUser } from '@/interfaces/IUser';
+// import { IUser } from '@/interfaces/IUser';
 
-import { LS_KEY_CART, LS_KEY_USER } from '../constants';
+// import { LS_KEY_CART, LS_KEY_USER } from '../constants';
 
-// User
-export const saveUserDataOnLocalStorage = (data: IUser) => {
-  localStorage.setItem(LS_KEY_USER, JSON.stringify(data));
-};
+// // User
+// export const saveUserDataOnLocalStorage = (data: IUser) => {
+//   localStorage.setItem(LS_KEY_USER, JSON.stringify(data));
+// };
 
-export const getUserDataOnLocalStorage = () => {
-  const retrivedUser = localStorage.getItem(LS_KEY_USER);
-  if (retrivedUser) {
-    try {
-      return JSON.parse(retrivedUser);
-    } catch (error) {
-      return {};
-    }
-  }
-  return {};
-};
+// export const getUserDataOnLocalStorage = () => {
+//   const retrivedUser = localStorage.getItem(LS_KEY_USER);
+//   if (retrivedUser) {
+//     try {
+//       return JSON.parse(retrivedUser);
+//     } catch (error) {
+//       return {};
+//     }
+//   }
+//   return {};
+// };
 
-export const deleteUserDataOnLocalStorage = () => {
-  localStorage.removeItem(LS_KEY_USER);
-};
+// export const deleteUserDataOnLocalStorage = () => {
+//   localStorage.removeItem(LS_KEY_USER);
+// };
 
 // Cart
 // export const saveCartOnLocalStorage = (data) => {

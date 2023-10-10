@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
 
+import { useAppSelector } from '@/redux/hooks';
 import { IUser } from '@/interfaces/IUser';
 import { useLoginUserMutation } from '@/redux/api/services/userSlice';
 import {
@@ -18,14 +18,11 @@ import {
   ROLE_CUSTOMER,
   ROLE_SELLER,
 } from '@/constants';
-import { RootState } from '@/redux/store';
 
 export default function Login() {
   const router = useRouter();
   const [loginUser] = useLoginUserMutation();
-  const userData = useSelector(
-    (state: RootState) => state.reducer.authSlice.userData
-  );
+  const userData = useAppSelector((state) => state.reducer.authSlice.userData);
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [isUserNotFound, setUserIsNotFound] = useState(false);

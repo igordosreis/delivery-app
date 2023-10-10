@@ -2,7 +2,7 @@ import { deliveryApi } from '@/redux/api/apiSlice';
 import { IUser, IUserLogin } from '@/interfaces/IUser';
 import { PATH_LOGIN } from '@/constants';
 
-export const extendedApiSlice = deliveryApi.injectEndpoints({
+export const userApiSlice = deliveryApi.injectEndpoints({
   endpoints: (builder) => ({
     loginUser: builder.mutation<IUser, IUserLogin>({
       query: (userData) => ({
@@ -15,4 +15,4 @@ export const extendedApiSlice = deliveryApi.injectEndpoints({
   }),
 });
 
-export const { useLoginUserMutation } = extendedApiSlice;
+export const { useLoginUserMutation } = userApiSlice;
