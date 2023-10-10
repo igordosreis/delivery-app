@@ -136,31 +136,35 @@ function Products() {
   };
 
   const renderCartPriceAndButton = () => {
-    // const totalPrice = Object.values(productQuantity)
-    //   .reduce((accTotalPrice, currProduct) => {
-    //     const currTotalPrice = currProduct.quantity * currProduct.price;
-
-    //     return accTotalPrice + currTotalPrice;
-    //   }, 0)
-    //   .toFixed(2)
-    //   .replace('.', ',');
-    // const isDisable = totalPrice === '0,00';
+    const totalPrice = Object.values(cart)
+      .reduce((accTotalPrice, currProduct) => {
+        if (currProduct.price) {
+          const currTotalPrice = currProduct.quantity * +currProduct.price;
+          return accTotalPrice + currTotalPrice;
+        }
+        return accTotalPrice;
+      }, 0)
+      .toFixed(2)
+      .replace('.', ',');
+    const isDisable = totalPrice === '0,00';
 
     return (
       <div className="cart-div">
-        {/* <button
-          data-testid={`${CUSTOMER_PRODUCTS}${BUTTON_CART}`}
-          type="button"
-          onClick={() => router.push(`/${PATH_CUSTOMER}/${PATH_CHECKOUT}`)}
-          disabled={isDisable}
-          className="cart"
-        >
-          {'Ver carrinho: '}
-          <div data-testid={`${CUSTOMER_PRODUCTS}${CHECKOUT_BOTTOM_VALUE}`}>
-            {'R$ '}
-            {totalPrice}
-          </div>
-        </button> */}
+        {
+          <button
+            data-testid={`${CUSTOMER_PRODUCTS}${BUTTON_CART}`}
+            type="button"
+            onClick={() => router.push(`/${PATH_CUSTOMER}/${PATH_CHECKOUT}`)}
+            disabled={isDisable}
+            className="cart"
+          >
+            {'Ver carrinho: '}
+            <div data-testid={`${CUSTOMER_PRODUCTS}${CHECKOUT_BOTTOM_VALUE}`}>
+              {'R$ '}
+              {totalPrice}
+            </div>
+          </button>
+        }
       </div>
     );
   };
