@@ -110,7 +110,7 @@ function Products() {
                   data-price={price}
                   type="text"
                   onChange={handleInputOnChange}
-                  value={cartItem && cartItem.quantity ? cartItem.quantity : 0}
+                  value={(cartItem && cartItem.quantity) || 0}
                   className="product-card-bottom-0"
                 />
                 <button
@@ -138,11 +138,8 @@ function Products() {
   const renderCartPriceAndButton = () => {
     const totalPrice = Object.values(cart)
       .reduce((accTotalPrice, currProduct) => {
-        if (currProduct.price) {
-          const currTotalPrice = currProduct.quantity * +currProduct.price;
-          return accTotalPrice + currTotalPrice;
-        }
-        return accTotalPrice;
+        const currTotalPrice = currProduct.quantity * +currProduct.price;
+        return accTotalPrice + currTotalPrice;
       }, 0)
       .toFixed(2)
       .replace('.', ',');

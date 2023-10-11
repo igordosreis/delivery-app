@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { ICart, IProductAction } from '@/interfaces/IProduct';
+import { ICart, IProductAction, IProductInputAction } from '@/interfaces/IProduct';
 
 interface CartState {
   cartData: ICart | {};
@@ -53,10 +53,9 @@ export const cartSlice = createSlice({
         state.cartData = newState;
       }
     },
-    inputQuantity: (state, { payload }: PayloadAction<IProductAction>) => {
-      const { id, value } = payload;
+    inputQuantity: (state, { payload }: PayloadAction<IProductInputAction>) => {
+      const { id, productname, price, value } = payload;
       const cartData: ICart = state.cartData;
-      const cartItem = cartData[id];
 
       const isInputZero = value && +value === 0;
       const isInputEmpty = typeof value === 'string' && value.length === 0;
@@ -64,11 +63,13 @@ export const cartSlice = createSlice({
         const { [id]: productRemovedFromCart, ...newState } = cartData;
 
         state.cartData = newState;
-      } else if (value) {
+      } else {
         state.cartData = {
           ...cartData,
           [id]: {
-            ...cartItem,
+            id,
+            productname,
+            price,
             quantity: +value,
           },
         };
