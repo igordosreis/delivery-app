@@ -57,9 +57,9 @@ export const cartSlice = createSlice({
       const { id, productname, price, value } = payload;
       const cartData: ICart = state.cartData;
 
-      const isInputZero = value && +value === 0;
-      const isInputEmpty = typeof value === 'string' && value.length === 0;
-      if (isInputZero || isInputEmpty) {
+      const isInputEmptyOrZero =
+        (typeof value === 'string' && value.length === 0) || +value === 0;
+      if (isInputEmptyOrZero) {
         const { [id]: productRemovedFromCart, ...newState } = cartData;
 
         state.cartData = newState;

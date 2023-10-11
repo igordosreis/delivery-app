@@ -139,6 +139,7 @@ function Products() {
     const totalPrice = Object.values(cart)
       .reduce((accTotalPrice, currProduct) => {
         const currTotalPrice = currProduct.quantity * +currProduct.price;
+
         return accTotalPrice + currTotalPrice;
       }, 0)
       .toFixed(2)
