@@ -58,7 +58,7 @@ function Products() {
       dataset: { id, productname, price },
     },
   }: React.ChangeEvent<HTMLInputElement>) => {
-    if (id && productname && price && (+value >= 0 || value.length === 0)) {
+    if (id && productname && price) {
       dispatch(inputQuantity({ id, productname, price, value }));
     }
   };
