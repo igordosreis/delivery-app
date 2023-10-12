@@ -1,241 +1,248 @@
-// import React, { useMemo, useState } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { useHistory } from 'react-router-dom';
-// import { saveCartAcion } from '../../redux/actions';
-// import { getSellers, postOrder } from '../../services/handleCheckoutRequests';
-// import { saveCartOnLocalStorage } from '../../services/handleLocalStorage';
-// import useAuthFetch from '../../services/useAuthFetch';
-// import SelectWithOptions from '../../components/SelectWithOptions';
-// import {
-//   BUTTON_SUBMIT_ORDER,
-//   CUSTOMER_CHECKOUT,
-//   ELM_TABLE_NAME,
-//   ELM_TABLE_NUMBER,
-//   ELM_TABLE_QUANTITY,
-//   ELM_TABLE_REMOVE,
-//   ELM_TABLE_SUBTOTAL,
-//   ELM_TABLE_TOTAL_PRICE,
-//   ELM_TABLE_UNIT_PRICE,
-//   INPUT_ADDRESS,
-//   INPUT_ADDRESS_NUMBER,
-//   PATH_CUSTOMER,
-//   PATH_ORDERS,
-//   SELECT_SELLER,
-// } from '@/constants';
+import React, { useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
 
-// function Checkout() {
-//   const history = useHistory();
-//   const dispatch = useDispatch();
-//   const [data] = useAuthFetch(getSellers);
-//   const {
-//     cart: { currentCart },
-//     user: { token },
-//   } = useSelector((state) => state);
-//   const [sellerId, setSellerId] = useState('');
-//   const [deliveryAddress, setDeliveryAddress] = useState('');
-//   const [deliveryNumber, setDeliveryNumber] = useState('');
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import SelectWithOptions from '@/components/SelectWithOptions';
+import {
+  BUTTON_SUBMIT_ORDER,
+  CUSTOMER_CHECKOUT,
+  ELM_TABLE_NAME,
+  ELM_TABLE_NUMBER,
+  ELM_TABLE_QUANTITY,
+  ELM_TABLE_REMOVE,
+  ELM_TABLE_SUBTOTAL,
+  ELM_TABLE_TOTAL_PRICE,
+  ELM_TABLE_UNIT_PRICE,
+  INPUT_ADDRESS,
+  INPUT_ADDRESS_NUMBER,
+  PATH_CUSTOMER,
+  PATH_ORDERS,
+  SELECT_SELLER,
+} from '@/constants';
+import { useGetSellersQuery } from '@/redux/api/services/userSlice';
+import { deleteProduct } from '@/redux/features/cart/cartSlice';
+import { usePostOrderMutation } from '@/redux/api/services/ordersSlice';
+import { IOrderRequest } from '@/interfaces/IOrders';
+import useLogoutOnError from '@/services/useLogoutOnError';
 
-//   // Validations
-//   const isDisabled = !(sellerId && deliveryAddress && deliveryNumber);
+function Checkout() {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { data, isError, error } = useGetSellersQuery();
+  const [postOrder] = usePostOrderMutation();
+  const cart = useAppSelector((state) => state.reducer.cartSlice.cartData);
+  const [sellerId, setSellerId] = useState(+'');
+  const [deliveryAddress, setDeliveryAddress] = useState('');
+  const [deliveryNumber, setDeliveryNumber] = useState('');
 
-//   // Handlers
-//   const handleRemoveButtonCLick = ({
-//     target: {
-//       dataset: { id },
-//     },
-//   }) => {
-//     const { [id]: productRemovedFromCart, ...newCart } = currentCart;
-//     saveCartOnLocalStorage(newCart);
-//     dispatch(saveCartAcion(newCart));
-//   };
+  // Validations
+  useLogoutOnError(isError, error);
+  const isDisabled = !(sellerId && deliveryAddress && deliveryNumber);
 
-//   const handleSellerSelectOnChange = ({ target: { value } }) => setSellerId(+value);
+  // Handlers
+  const handleRemoveButtonCLick = ({
+    currentTarget: {
+      dataset: { id },
+    },
+  }: React.MouseEvent<HTMLElement>) => {
+    if (id) {
+      dispatch(deleteProduct({ id }));
+    }
+  };
 
-//   const handleAddressInputOnChange = ({ target: { value } }) =>
-//     setDeliveryAddress(value);
+  const handleSellerSelectOnChange = ({
+    currentTarget: { value },
+  }: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) =>
+    setSellerId(+value);
 
-//   const handleAddressNumberInputOnChange = ({ target: { value } }) => {
-//     const isInputValidNumber = +value >= 0 || value === '';
-//     if (isInputValidNumber) setDeliveryNumber(value);
-//   };
+  const handleAddressInputOnChange = ({
+    currentTarget: { value },
+  }: React.ChangeEvent<HTMLInputElement>) => setDeliveryAddress(value);
 
-//   const totalPrice = useMemo(
-//     () =>
-//       Object.values(currentCart)
-//         .reduce((accTotal, currProduct) => {
-//           const currTotal = currProduct.price * currProduct.quantity;
+  const handleAddressNumberInputOnChange = ({
+    currentTarget: { value },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    const isInputValidNumber = +value >= 0 || value === '';
+    if (isInputValidNumber) setDeliveryNumber(value);
+  };
 
-//           return accTotal + currTotal;
-//         }, 0)
-//         .toFixed(2),
-//     [currentCart]
-//   );
+  const totalPrice = useMemo(
+    () =>
+      Object.values(cart)
+        .reduce((accTotal, currProduct) => {
+          const currTotal = +currProduct.price * currProduct.quantity;
 
-//   const handleSubmitOrder = async (event) => {
-//     event.preventDefault();
+          return accTotal + currTotal;
+        }, 0)
+        .toFixed(2),
+    [cart]
+  );
 
-//     const products = Object.values(currentCart || {}).map(({ id, quantity }) => ({
-//       id,
-//       quantity,
-//     }));
-//     const priceToNumber = Number(totalPrice);
-//     const orderRequest = {
-//       sellerId,
-//       totalPrice: priceToNumber,
-//       deliveryAddress,
-//       deliveryNumber: `${deliveryNumber}`,
-//       products,
-//     };
+  const handleSubmitOrder = async (event: React.MouseEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-//     const {
-//       userData: { id },
-//     } = await postOrder(token, orderRequest);
-//     saveCartOnLocalStorage({});
-//     dispatch(saveCartAcion({}));
-//     history.push(`/${PATH_CUSTOMER}/${PATH_ORDERS}/${id}`);
-//   };
+    const products = Object.values(cart).map(({ id, quantity }) => ({
+      id,
+      quantity,
+    }));
+    const orderRequest: IOrderRequest = {
+      sellerId,
+      totalPrice: Number(totalPrice),
+      deliveryAddress,
+      deliveryNumber: `${deliveryNumber}`,
+      products,
+    };
 
-//   // Rendering
-//   const renderRemoveProductButton = (index, id) => (
-//     <button
-//       data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_REMOVE}-${index}`}
-//       data-id={id}
-//       type="button"
-//       onClick={handleRemoveButtonCLick}
-//     >
-//       Remover
-//     </button>
-//   );
+    try {
+      const { id } = await postOrder(orderRequest).unwrap();
+      // goToNextPage(payload);
+      router.push(`/${PATH_CUSTOMER}/${PATH_ORDERS}/${id}`);
+    } catch (error) {
+      // setUserIsNotFound(true);
+    }
+  };
 
-//   const renderProductsForCheckoutTable = () => {
-//     const productsFromCartArray = Object.values(currentCart || {});
-//     // const productsFromCartArray = [...Object.values(currentCart || {})].reverse();
-//     const productsForCheckoutArray = productsFromCartArray.map(
-//       ({ id, name, price, quantity }, index) => {
-//         const adjustedIndex = index + 1;
-//         const subTotal = (price * quantity).toFixed(2).replace('.', ',');
+  // Rendering
+  const renderRemoveProductButton = (index: number, id: string | number) => (
+    <button
+      data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_REMOVE}-${index}`}
+      data-id={id}
+      type="button"
+      onClick={handleRemoveButtonCLick}
+    >
+      Remover
+    </button>
+  );
 
-//         const product = (
-//           <tr key={id} className="td-line">
-//             <td
-//               data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_NUMBER}-${index}`}
-//               className="td-item"
-//             >
-//               {adjustedIndex}
-//             </td>
-//             <td
-//               data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_NAME}-${index}`}
-//               className="td-name"
-//             >
-//               {name}
-//             </td>
-//             <td
-//               data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_QUANTITY}-${index}`}
-//               className="td-quantity"
-//             >
-//               {quantity}
-//             </td>
-//             <td
-//               data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_UNIT_PRICE}-${index}`}
-//               className="td-price"
-//             >
-//               {price.replace('.', ',')}
-//             </td>
-//             <td
-//               data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_SUBTOTAL}-${index}`}
-//               className="td-subtotal"
-//             >
-//               {subTotal}
-//             </td>
-//             <td className="td-button">{renderRemoveProductButton(index, id)}</td>
-//           </tr>
-//         );
+  const renderProductsForCheckoutTable = () => {
+    const productsFromCartArray = Object.values(cart);
+    // const productsFromCartArray = [...Object.values(currentCart || {})].reverse();
+    const productsForCheckoutArray = productsFromCartArray.map(
+      ({ id, productname, price, quantity }, index) => {
+        const adjustedIndex = index + 1;
+        const subTotal = (+price * quantity).toFixed(2).replace('.', ',');
 
-//         return product;
-//       }
-//     );
+        const product = (
+          <tr key={id} className="td-line">
+            <td
+              data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_NUMBER}-${index}`}
+              className="td-item"
+            >
+              {adjustedIndex}
+            </td>
+            <td
+              data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_NAME}-${index}`}
+              className="td-name"
+            >
+              {productname}
+            </td>
+            <td
+              data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_QUANTITY}-${index}`}
+              className="td-quantity"
+            >
+              {quantity}
+            </td>
+            <td
+              data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_UNIT_PRICE}-${index}`}
+              className="td-price"
+            >
+              {price.replace('.', ',')}
+            </td>
+            <td
+              data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_SUBTOTAL}-${index}`}
+              className="td-subtotal"
+            >
+              {subTotal}
+            </td>
+            <td className="td-button">{renderRemoveProductButton(index, id)}</td>
+          </tr>
+        );
 
-//     const productsTable = (
-//       <table className="table-checkout">
-//         <thead>
-//           <tr>
-//             <th>Item</th>
-//             <th>Descrição</th>
-//             <th>Quantidade</th>
-//             <th>Valor Unitário</th>
-//             <th>Sub-total</th>
-//           </tr>
-//         </thead>
-//         <tbody>{productsForCheckoutArray}</tbody>
-//       </table>
-//     );
+        return product;
+      }
+    );
 
-//     return productsTable;
-//   };
+    const productsTable = (
+      <table className="table-checkout">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Descrição</th>
+            <th>Quantidade</th>
+            <th>Valor Unitário</th>
+            <th>Sub-total</th>
+          </tr>
+        </thead>
+        <tbody>{productsForCheckoutArray}</tbody>
+      </table>
+    );
 
-//   const renderTotalPrice = () => (
-//     <div className="total-price">
-//       <span>{'Total: '}</span>
-//       <span data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_TOTAL_PRICE}`}>
-//         {totalPrice.replace('.', ',')}
-//       </span>
-//     </div>
-//   );
+    return productsTable;
+  };
 
-//   return (
-//     <>
-//       <div>
-//         <h3>Finalizar Pedido</h3>
-//         <div className="table-checkout-container">
-//           {renderProductsForCheckoutTable()}
-//           {renderTotalPrice()}
-//         </div>
-//       </div>
-//       <div>
-//         <h3>Detalhes e Endereço para Entrega</h3>
-//         <div className="form-checkout-complete">
-//           <form onSubmit={handleSubmitOrder} className="form-checkout">
-//             <SelectWithOptions
-//               dataTestId={`${CUSTOMER_CHECKOUT}${SELECT_SELLER}`}
-//               data={data.userData || []}
-//               name="seller"
-//               id="seller"
-//               value={sellerId}
-//               onChange={handleSellerSelectOnChange}
-//               className="form-select"
-//               placeholder="Vendedora Responsável"
-//             />
-//             <input
-//               data-testid={`${CUSTOMER_CHECKOUT}${INPUT_ADDRESS}`}
-//               type="text"
-//               name="address"
-//               value={deliveryAddress}
-//               onChange={handleAddressInputOnChange}
-//               className="txt-box"
-//               placeholder="Endereço"
-//             />
-//             <input
-//               data-testid={`${CUSTOMER_CHECKOUT}${INPUT_ADDRESS_NUMBER}`}
-//               type="text"
-//               name="addressNumber"
-//               value={deliveryNumber}
-//               onChange={handleAddressNumberInputOnChange}
-//               className="txt-box"
-//               placeholder="Número"
-//             />
-//             <button
-//               data-testid={`${CUSTOMER_CHECKOUT}${BUTTON_SUBMIT_ORDER}`}
-//               type="submit"
-//               disabled={isDisabled}
-//               className="checkout-button"
-//             >
-//               FINALIZAR PEDIDO
-//             </button>
-//           </form>
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
+  const renderTotalPrice = () => (
+    <div className="total-price">
+      <span>{'Total: '}</span>
+      <span data-testid={`${CUSTOMER_CHECKOUT}${ELM_TABLE_TOTAL_PRICE}`}>
+        {totalPrice.replace('.', ',')}
+      </span>
+    </div>
+  );
 
-// export default Checkout;
+  return (
+    <>
+      <div>
+        <h3>Finalizar Pedido</h3>
+        <div className="table-checkout-container">
+          {renderProductsForCheckoutTable()}
+          {renderTotalPrice()}
+        </div>
+      </div>
+      <div>
+        <h3>Detalhes e Endereço para Entrega</h3>
+        <div className="form-checkout-complete">
+          <form onSubmit={handleSubmitOrder} className="form-checkout">
+            <SelectWithOptions
+              dataTestId={`${CUSTOMER_CHECKOUT}${SELECT_SELLER}`}
+              data={data || []}
+              name="seller"
+              id="seller"
+              value={sellerId}
+              onChange={handleSellerSelectOnChange}
+              className="form-select"
+              placeholder="Vendedora Responsável"
+            />
+            <input
+              data-testid={`${CUSTOMER_CHECKOUT}${INPUT_ADDRESS}`}
+              type="text"
+              name="address"
+              value={deliveryAddress}
+              onChange={handleAddressInputOnChange}
+              className="txt-box"
+              placeholder="Endereço"
+            />
+            <input
+              data-testid={`${CUSTOMER_CHECKOUT}${INPUT_ADDRESS_NUMBER}`}
+              type="text"
+              name="addressNumber"
+              value={deliveryNumber}
+              onChange={handleAddressNumberInputOnChange}
+              className="txt-box"
+              placeholder="Número"
+            />
+            <button
+              data-testid={`${CUSTOMER_CHECKOUT}${BUTTON_SUBMIT_ORDER}`}
+              type="submit"
+              disabled={isDisabled}
+              className="checkout-button"
+            >
+              FINALIZAR PEDIDO
+            </button>
+          </form>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default Checkout;

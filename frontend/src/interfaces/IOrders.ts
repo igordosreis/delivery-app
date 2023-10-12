@@ -6,7 +6,7 @@ export interface IOrderId {
 
 export interface IOrderRequest {
   sellerId: number;
-  totalPrice: string;
+  totalPrice: number;
   deliveryAddress: string;
   deliveryNumber: string;
   products: IProductInOrder[];

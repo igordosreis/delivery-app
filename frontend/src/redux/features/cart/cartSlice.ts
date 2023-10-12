@@ -75,7 +75,7 @@ export const cartSlice = createSlice({
         };
       }
     },
-    deleteProduct: (state, { payload }: PayloadAction<IProductInputAction>) => {
+    deleteProduct: (state, { payload }: PayloadAction<IProductAction>) => {
       const { id } = payload;
       const cartData: ICart = state.cartData;
       const { [id]: productRemovedFromCart, ...remaningProductsInCart } = cartData;
@@ -89,5 +89,5 @@ export const cartSlice = createSlice({
 });
 
 export default cartSlice.reducer;
-export const { addProduct, removeProduct, inputQuantity, emptyCart } =
+export const { addProduct, removeProduct, inputQuantity, deleteProduct, emptyCart } =
   cartSlice.actions;

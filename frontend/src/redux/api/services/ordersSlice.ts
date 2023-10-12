@@ -10,13 +10,12 @@ export const ordersApiSlice = deliveryApi.injectEndpoints({
         method: 'POST',
         body: userData,
       }),
-      invalidatesTags: ['User'],
     }),
     getOrders: builder.query<IOrder[], void>({
       query: () => ({
         url: `/${PATH_ORDERS}`,
       }),
-      providesTags: ['Sellers'],
+      providesTags: ['Order'],
     }),
   }),
 });
