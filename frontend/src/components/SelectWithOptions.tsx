@@ -32,9 +32,12 @@ export default function SelectWithOptions({
       onChange={onChange}
       {...otherProps}
     >
-      {data.map(({ userName }: IUserSeller) => (
-        <option key={userName} value={userName}>
-          userName
+      <option value="" hidden>
+        Escolha um vendedor
+      </option>
+      {data.map(({ id, userName }: IUserSeller) => (
+        <option key={userName} value={id}>
+          {userName}
         </option>
       ))}
     </select>

@@ -20,7 +20,7 @@ import {
   SELECT_SELLER,
 } from '@/constants';
 import { useGetSellersQuery } from '@/redux/api/services/userSlice';
-import { deleteProduct } from '@/redux/features/cart/cartSlice';
+import { deleteProduct, emptyCart } from '@/redux/features/cart/cartSlice';
 import { usePostOrderMutation } from '@/redux/api/services/ordersSlice';
 import { IOrderRequest } from '@/interfaces/IOrders';
 import useLogoutOnError from '@/services/useLogoutOnError';
@@ -34,6 +34,7 @@ function Checkout() {
   const [sellerId, setSellerId] = useState(+'');
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryNumber, setDeliveryNumber] = useState('');
+  const [isErrorMessage, setIsErrorMessage] = useState(false);
 
   // Validations
   useLogoutOnError(isError, error);
@@ -95,10 +96,10 @@ function Checkout() {
 
     try {
       const { id } = await postOrder(orderRequest).unwrap();
-      // goToNextPage(payload);
+      dispatch(emptyCart());
       router.push(`/${PATH_CUSTOMER}/${PATH_ORDERS}/${id}`);
     } catch (error) {
-      // setUserIsNotFound(true);
+      setIsErrorMessage(true);
     }
   };
 
@@ -189,6 +190,57 @@ function Checkout() {
     </div>
   );
 
+  const renderForm = () => (
+    <div>
+      <h3>Detalhes e Endereço para Entrega</h3>
+      <div className="form-checkout-complete">
+        <form onSubmit={handleSubmitOrder} className="form-checkout">
+          <SelectWithOptions
+            dataTestId={`${CUSTOMER_CHECKOUT}${SELECT_SELLER}`}
+            data={data || []}
+            name="seller"
+            id="seller"
+            value={sellerId}
+            onChange={handleSellerSelectOnChange}
+            className="form-select"
+            placeholder="Vendedora Responsável"
+          />
+          <input
+            data-testid={`${CUSTOMER_CHECKOUT}${INPUT_ADDRESS}`}
+            type="text"
+            name="address"
+            value={deliveryAddress}
+            onChange={handleAddressInputOnChange}
+            className="txt-box"
+            placeholder="Endereço"
+          />
+          <input
+            data-testid={`${CUSTOMER_CHECKOUT}${INPUT_ADDRESS_NUMBER}`}
+            type="text"
+            name="addressNumber"
+            value={deliveryNumber}
+            onChange={handleAddressNumberInputOnChange}
+            className="txt-box"
+            placeholder="Número"
+          />
+          <button
+            data-testid={`${CUSTOMER_CHECKOUT}${BUTTON_SUBMIT_ORDER}`}
+            type="submit"
+            disabled={isDisabled}
+            className="checkout-button"
+          >
+            FINALIZAR PEDIDO
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+
+  const renderErrorMsg = () =>
+    isErrorMessage && (
+      <div>Ocorreu um problema inesperado. Por favor tente novamente em breve.</div>
+    );
+
   return (
     <>
       <div>
@@ -196,49 +248,8 @@ function Checkout() {
         <div className="table-checkout-container">
           {renderProductsForCheckoutTable()}
           {renderTotalPrice()}
-        </div>
-      </div>
-      <div>
-        <h3>Detalhes e Endereço para Entrega</h3>
-        <div className="form-checkout-complete">
-          <form onSubmit={handleSubmitOrder} className="form-checkout">
-            <SelectWithOptions
-              dataTestId={`${CUSTOMER_CHECKOUT}${SELECT_SELLER}`}
-              data={data || []}
-              name="seller"
-              id="seller"
-              value={sellerId}
-              onChange={handleSellerSelectOnChange}
-              className="form-select"
-              placeholder="Vendedora Responsável"
-            />
-            <input
-              data-testid={`${CUSTOMER_CHECKOUT}${INPUT_ADDRESS}`}
-              type="text"
-              name="address"
-              value={deliveryAddress}
-              onChange={handleAddressInputOnChange}
-              className="txt-box"
-              placeholder="Endereço"
-            />
-            <input
-              data-testid={`${CUSTOMER_CHECKOUT}${INPUT_ADDRESS_NUMBER}`}
-              type="text"
-              name="addressNumber"
-              value={deliveryNumber}
-              onChange={handleAddressNumberInputOnChange}
-              className="txt-box"
-              placeholder="Número"
-            />
-            <button
-              data-testid={`${CUSTOMER_CHECKOUT}${BUTTON_SUBMIT_ORDER}`}
-              type="submit"
-              disabled={isDisabled}
-              className="checkout-button"
-            >
-              FINALIZAR PEDIDO
-            </button>
-          </form>
+          {renderForm()}
+          {renderErrorMsg()}
         </div>
       </div>
     </>
