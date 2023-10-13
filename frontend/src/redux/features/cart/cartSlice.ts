@@ -48,9 +48,9 @@ export const cartSlice = createSlice({
           },
         };
       } else {
-        const { [id]: productRemovedFromCart, ...newState } = cartData;
+        const { [id]: productRemovedFromCart, ...remaningProductsInCart } = cartData;
 
-        state.cartData = newState;
+        state.cartData = remaningProductsInCart;
       }
     },
     inputQuantity: (state, { payload }: PayloadAction<IProductInputAction>) => {
@@ -60,9 +60,9 @@ export const cartSlice = createSlice({
       const isInputEmptyStringOrZero =
         (typeof value === 'string' && value.length === 0) || +value === 0;
       if (isInputEmptyStringOrZero) {
-        const { [id]: productRemovedFromCart, ...newState } = cartData;
+        const { [id]: productRemovedFromCart, ...remaningProductsInCart } = cartData;
 
-        state.cartData = newState;
+        state.cartData = remaningProductsInCart;
       } else if (+value > 0) {
         state.cartData = {
           ...cartData,
@@ -75,6 +75,13 @@ export const cartSlice = createSlice({
         };
       }
     },
+    deleteProduct: (state, { payload }: PayloadAction<IProductAction>) => {
+      const { id } = payload;
+      const cartData: ICart = state.cartData;
+      const { [id]: productRemovedFromCart, ...remaningProductsInCart } = cartData;
+
+      state.cartData = remaningProductsInCart;
+    },
     emptyCart: (state) => {
       state.cartData = {};
     },
@@ -82,5 +89,5 @@ export const cartSlice = createSlice({
 });
 
 export default cartSlice.reducer;
-export const { addProduct, removeProduct, inputQuantity, emptyCart } =
+export const { addProduct, removeProduct, inputQuantity, deleteProduct, emptyCart } =
   cartSlice.actions;
