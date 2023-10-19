@@ -4,21 +4,20 @@ export interface IOrderId {
   id: number;
 }
 
-export interface IOrderRequest {
+export interface IOrderBase {
   sellerId: number;
-  totalPrice: number;
+  totalPrice: string;
   deliveryAddress: string;
   deliveryNumber: string;
+}
+
+export interface IOrderRequest extends IOrderBase {
   products: IProductInOrder[];
 }
 
-export interface IOrder {
+export interface IOrder extends IOrderBase {
   id: number;
-  userId: number;
-  sellerId: number;
   totalPrice: string;
   status: string;
-  deliveryAddress: string;
-  deliveryNumber: string;
   orderDate: string;
 }
