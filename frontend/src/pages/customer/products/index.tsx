@@ -24,7 +24,7 @@ import {
 } from '@/redux/features/cart/cartSlice';
 import { ICart } from '@/interfaces/IProduct';
 
-function Products() {
+function ProductsPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { data, isError, error } = useGetProductsQuery();
@@ -175,4 +175,4 @@ function Products() {
   );
 }
 
-export default Products;
+export default ProductsPage;
