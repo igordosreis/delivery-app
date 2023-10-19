@@ -17,7 +17,14 @@ export const ordersApiSlice = deliveryApi.injectEndpoints({
       }),
       providesTags: ['Order'],
     }),
+    getOrderById: builder.query<IOrder, void>({
+      query: (id) => ({
+        url: `/${PATH_ORDERS}/${id}`,
+      }),
+      providesTags: ['Order'],
+    }),
   }),
 });
 
-export const { usePostOrderMutation, useGetOrdersQuery } = ordersApiSlice;
+export const { usePostOrderMutation, useGetOrdersQuery, useGetOrderByIdQuery } =
+  ordersApiSlice;
