@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import React from 'react';
 import Link from 'next/link';
 
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { useAppSelector } from '@/redux/hooks';
 import {
   CUSTOMER_ORDERS,
   ELM_CARD_ADDRESS,
@@ -22,12 +21,9 @@ import { useGetOrdersQuery } from '@/redux/api/services/ordersSlice';
 import useLogoutOnError from '@/services/useLogoutOnError';
 
 function OrdersComponent() {
-  // const router = useRouter();
-  // const dispatch = useAppDispatch();
   const { data, isError, error } = useGetOrdersQuery();
   const user = useAppSelector((state) => state.reducer.authSlice.userData);
   useLogoutOnError(isError, error);
-  // const [sales, setSales] = useState([]);
 
   const isSeller = user?.role === ROLE_SELLER;
   // const PREFIXE = isSeller ? SELLER_ORDERS : CUSTOMER_ORDERS;
