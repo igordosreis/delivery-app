@@ -19,7 +19,7 @@ import {
   ROLE_SELLER,
 } from '@/constants';
 
-export default function Login() {
+export default function LoginPage() {
   const router = useRouter();
   const [loginUser] = useLoginUserMutation();
   const userData = useAppSelector((state) => state.reducer.authSlice.userData);

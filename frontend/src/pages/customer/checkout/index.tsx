@@ -25,7 +25,7 @@ import { usePostOrderMutation } from '@/redux/api/services/ordersSlice';
 import { IOrderRequest } from '@/interfaces/IOrders';
 import useLogoutOnError from '@/services/useLogoutOnError';
 
-function Checkout() {
+function CheckoutPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { data, isError, error } = useGetSellersQuery();
@@ -88,7 +88,7 @@ function Checkout() {
     }));
     const orderRequest: IOrderRequest = {
       sellerId,
-      totalPrice: Number(totalPrice),
+      totalPrice,
       deliveryAddress,
       deliveryNumber: `${deliveryNumber}`,
       products,
@@ -256,4 +256,4 @@ function Checkout() {
   );
 }
 
-export default Checkout;
+export default CheckoutPage;
