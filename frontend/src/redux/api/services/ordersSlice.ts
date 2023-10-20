@@ -17,7 +17,7 @@ export const ordersApiSlice = deliveryApi.injectEndpoints({
       }),
       providesTags: ['Order'],
     }),
-    getOrderById: builder.query<IOrder, void>({
+    getOrderById: builder.query<IOrder, string>({
       query: (id) => ({
         url: `/${PATH_ORDERS}/${id}`,
       }),
