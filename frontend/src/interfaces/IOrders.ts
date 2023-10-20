@@ -19,6 +19,6 @@ export interface IOrder extends IOrderBase {
   id: number;
   status: string;
   orderDate: string;
-  userName: string;
+  sellerName: string;
   products: IProductInOrder[];
 }

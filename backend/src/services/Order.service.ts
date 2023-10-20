@@ -26,7 +26,7 @@ export default class OrderService {
       orderDate,
       status,
       id: validatedOrderId,
-      seller: { userName },
+      seller: { userName: sellerName },
     } = validatedOrder;
 
     const products = await OrderProductModel.findAll({
@@ -39,7 +39,7 @@ export default class OrderService {
       },
     });
 
-    return { orderId, totalPrice, orderDate, status, userName, products };
+    return { orderId, totalPrice, orderDate, status, sellerName, products };
   }
 
   public static async updateStatus(
