@@ -22,3 +22,12 @@ export interface IOrder extends IOrderBase {
   sellerName: string;
   products: IProductInOrder[];
 }
+
+export interface IOrderStatusRequest {
+  status: string;
+  orderId: number | string;
+}
+
+export interface IOrderStatusResponse {
+  id: string | number;
+}

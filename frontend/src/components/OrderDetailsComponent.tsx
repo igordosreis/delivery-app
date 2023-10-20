@@ -96,9 +96,11 @@ export default function OrderDetailsComponent() {
   );
 
   return (
-    <main className="main-order-table">
-      {renderDetailsTable()}
-      {renderTotalPrice()}
-    </main>
+    <>
+      <section className="main-order-table">
+        {renderDetailsTable()}
+        {renderTotalPrice()}
+      </section>
+    </>
   );
 }
