@@ -33,11 +33,16 @@ export const ordersApiSlice = deliveryApi.injectEndpoints({
       query: ({ orderId, status }) => ({
         url: `/${PATH_ORDERS}/${orderId}`,
         method: 'PATCH',
-        body: status,
+        body: { status },
       }),
+      invalidatesTags: ['Order'],
     }),
   }),
 });
 
-export const { usePostOrderMutation, useGetOrdersQuery, useGetOrderByIdQuery } =
-  ordersApiSlice;
+export const {
+  usePostOrderMutation,
+  useGetOrdersQuery,
+  useGetOrderByIdQuery,
+  usePatchOrderStatusMutation,
+} = ordersApiSlice;
