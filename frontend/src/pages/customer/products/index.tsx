@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { useRouter } from 'next/router';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -23,6 +23,7 @@ import {
   inputQuantity,
 } from '@/redux/features/cart/cartSlice';
 import { ICart } from '@/interfaces/IProduct';
+import Layout from '@/components/Layout';
 
 function ProductsPage() {
   const router = useRouter();
@@ -174,5 +175,9 @@ function ProductsPage() {
     </div>
   );
 }
+
+ProductsPage.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
+};
 
 export default ProductsPage;

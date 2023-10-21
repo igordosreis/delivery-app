@@ -1,12 +1,10 @@
 import { ReactNode } from 'react';
 
+import ChildrenProps from '@/interfaces/Children';
+
 import Navbar from './Navbar';
 
-type Props = {
-  children: ReactNode;
-};
-
-export default function Layout({ children }: Props) {
+export default function Layout({ children }: ChildrenProps) {
   return (
     <>
       <Navbar>
