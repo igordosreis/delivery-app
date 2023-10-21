@@ -1,5 +1,11 @@
 import { deliveryApi } from '@/redux/api/apiSlice';
-import { IOrder, IOrderId, IOrderRequest } from '@/interfaces/IOrders';
+import {
+  IOrder,
+  IOrderId,
+  IOrderRequest,
+  IOrderStatusRequest,
+  IOrderStatusResponse,
+} from '@/interfaces/IOrders';
 import { PATH_CHECKOUT, PATH_CUSTOMER, PATH_ORDERS, PATH_SELLER } from '@/constants';
 
 export const ordersApiSlice = deliveryApi.injectEndpoints({
@@ -17,14 +23,26 @@ export const ordersApiSlice = deliveryApi.injectEndpoints({
       }),
       providesTags: ['Order'],
     }),
-    getOrderById: builder.query<IOrder, void>({
+    getOrderById: builder.query<IOrder, string>({
       query: (id) => ({
         url: `/${PATH_ORDERS}/${id}`,
       }),
       providesTags: ['Order'],
     }),
+    patchOrderStatus: builder.mutation<IOrderStatusResponse, IOrderStatusRequest>({
+      query: ({ orderId, status }) => ({
+        url: `/${PATH_ORDERS}/${orderId}`,
+        method: 'PATCH',
+        body: { status },
+      }),
+      invalidatesTags: ['Order'],
+    }),
   }),
 });
 
-export const { usePostOrderMutation, useGetOrdersQuery, useGetOrderByIdQuery } =
-  ordersApiSlice;
+export const {
+  usePostOrderMutation,
+  useGetOrdersQuery,
+  useGetOrderByIdQuery,
+  usePatchOrderStatusMutation,
+} = ordersApiSlice;

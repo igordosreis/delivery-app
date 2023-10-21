@@ -1,23 +1,33 @@
-import { IProductInOrder } from './IProduct';
+import { IProductInOrder, IProductInOrderRequest } from './IProduct';
 
 export interface IOrderId {
   id: number;
 }
 
 export interface IOrderBase {
-  sellerId: number;
   totalPrice: string;
   deliveryAddress: string;
   deliveryNumber: string;
 }
 
 export interface IOrderRequest extends IOrderBase {
-  products: IProductInOrder[];
+  sellerId: number;
+  products: IProductInOrderRequest[];
 }
 
 export interface IOrder extends IOrderBase {
   id: number;
-  totalPrice: string;
   status: string;
   orderDate: string;
+  sellerName: string;
+  products: IProductInOrder[];
+}
+
+export interface IOrderStatusRequest {
+  status: string;
+  orderId: number | string;
+}
+
+export interface IOrderStatusResponse {
+  id: string | number;
 }

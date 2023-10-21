@@ -23,9 +23,19 @@ export interface IProductInCart {
   quantity: number;
 }
 
-export interface IProductInOrder {
+export interface IProductInOrderRequest {
   id: number | string;
   quantity: number | string;
+}
+
+export interface IProductInOrder {
+  quantity: number | string;
+  product: {
+    id: number | string;
+    price: string;
+    productName: string;
+    url: string;
+  };
 }
 
 export interface ICart {
