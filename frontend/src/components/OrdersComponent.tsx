@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import Link from 'next/link';
 
+import Layout from '@/components/Layout';
 import { useAppSelector } from '@/redux/hooks';
 import {
   CUSTOMER_ORDERS,

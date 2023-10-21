@@ -4,7 +4,7 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/dist/query';
 import type { SerializedError } from '@reduxjs/toolkit';
 
 import { useAppDispatch } from '@/redux/hooks';
-import { logout } from '@/redux/features/auth/authSlice';
+import { logoutUser } from '@/redux/features/auth/authSlice';
 import { PATH_LOGIN } from '@/constants';
 
 const useLogoutOnError = (
@@ -18,7 +18,7 @@ const useLogoutOnError = (
     if (error && 'status' in error && !('error' in error)) {
       const errMsg = JSON.stringify(error.data);
       if (errMsg.toLowerCase().includes('token')) {
-        dispatch(logout());
+        dispatch(logoutUser());
         router.push(`/${PATH_LOGIN}`);
       }
     }

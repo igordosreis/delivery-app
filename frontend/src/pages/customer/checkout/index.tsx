@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { ReactElement, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
@@ -24,6 +24,7 @@ import { deleteProduct, emptyCart } from '@/redux/features/cart/cartSlice';
 import { usePostOrderMutation } from '@/redux/api/services/ordersSlice';
 import { IOrderRequest } from '@/interfaces/IOrders';
 import useLogoutOnError from '@/services/useLogoutOnError';
+import Layout from '@/components/Layout';
 
 function CheckoutPage() {
   const router = useRouter();
@@ -255,5 +256,9 @@ function CheckoutPage() {
     </>
   );
 }
+
+CheckoutPage.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
+};
 
 export default CheckoutPage;

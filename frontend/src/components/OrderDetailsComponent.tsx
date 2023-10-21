@@ -1,5 +1,7 @@
+import { ReactElement } from 'react';
 import { useRouter } from 'next/router';
 
+import Layout from '@/components/Layout';
 import {
   useGetOrderByIdQuery,
   usePatchOrderStatusMutation,
