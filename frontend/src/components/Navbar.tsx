@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { ReactNode } from 'react';
+import { useRouter } from 'next/router';
 
-import { useAppSelector } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { logoutUser } from '@/redux/features/auth/authSlice';
 import {
   CUSTOMER_PRODUCTS,
@@ -19,17 +19,19 @@ import {
   ROLE_CUSTOMER,
   ROLE_SELLER,
 } from '@/constants';
+import ChildrenProps from '@/interfaces/Children';
+import { deliveryApi } from '@/redux/api/apiSlice';
 
-type Props = {
-  children: ReactNode;
-};
-
-export default function Navbar({ children }: Props) {
+export default function Navbar({ children }: ChildrenProps) {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.reducer.authSlice.userData);
 
   // Handlers
   const handleLogoutButtonClick = () => {
-    logoutUser();
+    dispatch(logoutUser());
+    dispatch(deliveryApi.util.resetApiState());
+    router.replace(`/${PATH_LOGIN}`);
   };
 
   // Rendering
