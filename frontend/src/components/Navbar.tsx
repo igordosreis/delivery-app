@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ReactNode } from 'react';
 
 import { useAppSelector } from '@/redux/hooks';
 import { logoutUser } from '@/redux/features/auth/authSlice';
@@ -19,7 +20,11 @@ import {
   ROLE_SELLER,
 } from '@/constants';
 
-export default function Navbar() {
+type Props = {
+  children: ReactNode;
+};
+
+export default function Navbar({ children }: Props) {
   const user = useAppSelector((state) => state.reducer.authSlice.userData);
 
   // Handlers
@@ -85,10 +90,13 @@ export default function Navbar() {
   );
 
   return (
-    <header>
-      {renderLinks()}
-      {renderUserName()}
-      {renderLogoutButton()}
-    </header>
+    <>
+      <header>
+        {renderLinks()}
+        {renderUserName()}
+        {renderLogoutButton()}
+      </header>
+      {children}
+    </>
   );
 }
