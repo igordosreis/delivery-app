@@ -16,6 +16,7 @@ export const ordersApiSlice = deliveryApi.injectEndpoints({
         method: 'POST',
         body: userData,
       }),
+      invalidatesTags: ['Order'],
     }),
     getOrders: builder.query<IOrder[], void>({
       query: () => ({
