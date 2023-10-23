@@ -66,7 +66,6 @@ export default function RegisterFormComponent({ isRegisterPage }: RegisterProps)
       } else {
         setMessageError('Nome de usuário já cadastrado.');
       }
-      // setMessageError(response.data);
     }
   };
 
