@@ -27,34 +27,38 @@ export const userApiSlice = deliveryApi.injectEndpoints({
     getSellers: builder.query<IUserSeller[], void>({
       query: () => ({
         url: `/${PATH_CUSTOMER}/${PATH_SELLER}`,
+        method: 'GET',
       }),
       providesTags: ['Sellers'],
     }),
-    registerNewUser: builder.query<IUser, IUserRegister>({
+    registerNewUser: builder.mutation<IUser, IUserRegister>({
       query: (newUserData) => ({
         url: `/${PATH_REGISTER}`,
         method: 'POST',
         body: newUserData,
       }),
     }),
-    createNewUser: builder.query<void, IUserCreate>({
+    createNewUser: builder.mutation<void, IUserCreate>({
       query: (newUserData) => ({
         url: `/${PATH_ADMIN}`,
         method: 'POST',
         body: newUserData,
       }),
+      invalidatesTags: ['User'],
     }),
-    deleteUser: builder.query<void, string>({
+    deleteUser: builder.mutation<void, string>({
       query: (id) => ({
         url: `/${PATH_ADMIN}/${id}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['User'],
     }),
     getAllUsers: builder.query<Omit<IUser, 'password'>[], void>({
       query: () => ({
         url: `/${PATH_ADMIN}`,
         method: 'GET',
       }),
+      providesTags: ['User'],
     }),
   }),
 });
@@ -62,8 +66,8 @@ export const userApiSlice = deliveryApi.injectEndpoints({
 export const {
   useLoginUserMutation,
   useGetSellersQuery,
-  useRegisterNewUserQuery,
-  useCreateNewUserQuery,
-  useDeleteUserQuery,
+  useRegisterNewUserMutation,
+  useCreateNewUserMutation,
+  useDeleteUserMutation,
   useGetAllUsersQuery,
 } = userApiSlice;
