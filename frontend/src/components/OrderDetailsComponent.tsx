@@ -60,7 +60,9 @@ export default function OrderDetailsComponent() {
 
   const handleUpdateStatusButtonClick = async () => {
     const status = updateStatus();
-    if (status) await patchOrderStatus({ orderId, status });
+    try {
+      if (status) await patchOrderStatus({ orderId, status });
+    } catch (error) {}
   };
 
   // Rendering

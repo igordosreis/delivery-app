@@ -19,7 +19,7 @@ export default function AdminTable() {
     },
   }: React.MouseEvent<HTMLElement>) => {
     try {
-      if (id) deleteUser(id).unwrap();
+      if (id) await deleteUser(id).unwrap();
     } catch (error) {}
   };
 

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { HTTP_CREATED } from '@/constants';
+import { PATH_CUSTOMER, PATH_PRODUCTS } from '@/constants';
 import { RegisterProps } from '@/interfaces/Components';
 import {
   useCreateNewUserMutation,
@@ -11,8 +10,6 @@ import {
 
 export default function RegisterFormComponent({ isRegisterPage }: RegisterProps) {
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const userData = useAppSelector((state) => state.reducer.authSlice.userData);
   const [registerUser] = useRegisterNewUserMutation();
   const [createNewUser] = useCreateNewUserMutation();
   const [user, setUser] = useState({ userName: '', email: '', password: '' });
@@ -57,7 +54,8 @@ export default function RegisterFormComponent({ isRegisterPage }: RegisterProps)
   ) => {
     event.preventDefault();
     try {
-      const response = await registerUser(user).unwrap();
+      await registerUser(user).unwrap();
+      router.push(`${PATH_CUSTOMER}/${PATH_PRODUCTS}`);
     } catch (error) {
       setExistingUser(true);
       const errMsg = JSON.stringify(error).toLowerCase();
@@ -75,7 +73,7 @@ export default function RegisterFormComponent({ isRegisterPage }: RegisterProps)
     event.preventDefault();
     const newUserData = { ...user, role };
     try {
-      const response = await createNewUser(newUserData);
+      await createNewUser(newUserData);
     } catch (error) {
       setExistingUser(true);
       const errMsg = JSON.stringify(error).toLowerCase();
@@ -120,7 +118,7 @@ export default function RegisterFormComponent({ isRegisterPage }: RegisterProps)
             isRegisterPage ? handleRegisterUserOnSubmit : handleCreateUserOnSubmit
           }
         >
-          <label htmlFor="Nome">
+          <label htmlFor="userName">
             <input
               className="txt-box"
               id="userName"
