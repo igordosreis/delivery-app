@@ -6,6 +6,7 @@ import type { SerializedError } from '@reduxjs/toolkit';
 import { useAppDispatch } from '@/redux/hooks';
 import { logoutUser } from '@/redux/features/auth/authSlice';
 import { PATH_LOGIN } from '@/constants';
+import { deliveryApi } from '@/redux/api/apiSlice';
 
 const useLogoutOnError = (
   isError: boolean,
@@ -19,6 +20,7 @@ const useLogoutOnError = (
       const errMsg = JSON.stringify(error.data);
       if (errMsg.toLowerCase().includes('token')) {
         dispatch(logoutUser());
+        dispatch(deliveryApi.util.resetApiState());
         router.push(`/${PATH_LOGIN}`);
       }
     }
