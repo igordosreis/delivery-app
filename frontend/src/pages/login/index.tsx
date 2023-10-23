@@ -33,10 +33,10 @@ export default function LoginPage() {
     const isPasswordValid = passwordInput.length > NUM_PASSWORD_MIN_LENGTH;
     const areAllInputsValid = isEmailValid && isPasswordValid;
 
-    return areAllInputsValid;
+    return !areAllInputsValid;
   };
 
-  const isDisabled = !validateInputFields();
+  const isDisabled = validateInputFields();
 
   // Handlers
   const handleEmailInput = ({
