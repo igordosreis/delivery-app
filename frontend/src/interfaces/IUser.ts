@@ -1,4 +1,5 @@
 export interface IUser {
+  id: number | string;
   userName: string;
   email: string;
   role: string;
@@ -13,4 +14,14 @@ export interface IUserLogin {
 export interface IUserSeller {
   id: number;
   userName: string;
+}
+
+export interface IUserRegister {
+  email: string;
+  password: string;
+  userName: string;
+}
+
+export interface IUserCreate extends IUserRegister {
+  role: string;
 }
