@@ -48,6 +48,7 @@ export const store = configureStore({
   devTools: true,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
+      //RTK will ignore the following actions by redux-persist
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
