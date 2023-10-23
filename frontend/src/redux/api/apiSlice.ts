@@ -14,6 +14,6 @@ export const deliveryApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['User', 'Sellers', 'Products', 'Order'],
+  tagTypes: ['Users', 'Products', 'Orders'],
   endpoints: (builder) => ({}),
 });

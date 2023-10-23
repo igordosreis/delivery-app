@@ -22,14 +22,14 @@ export const userApiSlice = deliveryApi.injectEndpoints({
         method: 'POST',
         body: userData,
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ['Users'],
     }),
     getSellers: builder.query<IUserSeller[], void>({
       query: () => ({
         url: `/${PATH_CUSTOMER}/${PATH_SELLER}`,
         method: 'GET',
       }),
-      providesTags: ['Sellers'],
+      providesTags: ['Users'],
     }),
     registerNewUser: builder.mutation<IUser, IUserRegister>({
       query: (newUserData) => ({
@@ -44,21 +44,21 @@ export const userApiSlice = deliveryApi.injectEndpoints({
         method: 'POST',
         body: newUserData,
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ['Users'],
     }),
     deleteUser: builder.mutation<void, string>({
       query: (id) => ({
         url: `/${PATH_ADMIN}/${id}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ['Users'],
     }),
     getAllUsers: builder.query<Omit<IUser, 'password'>[], void>({
       query: () => ({
         url: `/${PATH_ADMIN}`,
         method: 'GET',
       }),
-      providesTags: ['User'],
+      providesTags: ['Users'],
     }),
   }),
 });

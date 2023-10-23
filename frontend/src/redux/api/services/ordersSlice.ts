@@ -16,19 +16,21 @@ export const ordersApiSlice = deliveryApi.injectEndpoints({
         method: 'POST',
         body: userData,
       }),
-      invalidatesTags: ['Order'],
+      invalidatesTags: ['Orders'],
     }),
     getOrders: builder.query<IOrder[], void>({
       query: () => ({
         url: `/${PATH_ORDERS}`,
+        method: 'GET',
       }),
-      providesTags: ['Order'],
+      providesTags: ['Orders'],
     }),
     getOrderById: builder.query<IOrder, string>({
       query: (id) => ({
         url: `/${PATH_ORDERS}/${id}`,
+        method: 'GET',
       }),
-      providesTags: ['Order'],
+      providesTags: ['Orders'],
     }),
     patchOrderStatus: builder.mutation<IOrderStatusResponse, IOrderStatusRequest>({
       query: ({ orderId, status }) => ({
@@ -36,7 +38,7 @@ export const ordersApiSlice = deliveryApi.injectEndpoints({
         method: 'PATCH',
         body: { status },
       }),
-      invalidatesTags: ['Order'],
+      invalidatesTags: ['Orders'],
     }),
   }),
 });
