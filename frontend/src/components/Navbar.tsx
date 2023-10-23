@@ -19,7 +19,7 @@ import {
   ROLE_CUSTOMER,
   ROLE_SELLER,
 } from '@/constants';
-import ChildrenProps from '@/interfaces/Children';
+import { ChildrenProps } from '@/interfaces/Components';
 import { deliveryApi } from '@/redux/api/apiSlice';
 
 export default function Navbar({ children }: ChildrenProps) {

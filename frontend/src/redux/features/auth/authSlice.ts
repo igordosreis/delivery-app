@@ -27,6 +27,12 @@ export const authSlice = createSlice({
         state.userData = payload;
       }
     );
+    builder.addMatcher(
+      userApiSlice.endpoints.registerNewUser.matchFulfilled,
+      (state, { payload }) => {
+        state.userData = payload;
+      }
+    );
   },
 });
 
