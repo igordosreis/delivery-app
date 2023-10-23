@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import ChildrenProps from '@/interfaces/Children';
+import { ChildrenProps } from '@/interfaces/Components';
 
 import Navbar from './Navbar';
 

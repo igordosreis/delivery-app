@@ -29,7 +29,7 @@ export default function RegisterFormComponent({ isRegisterPage }: RegisterProps)
     const minPassword = 6;
     const isPasswordValid = user.password.length >= minPassword;
 
-    const minName = 12;
+    const minName = 3;
     const isNameValid = user.userName.length >= minName;
 
     const areAllInputsValid = !(isEmailValid && isPasswordValid && isNameValid);
